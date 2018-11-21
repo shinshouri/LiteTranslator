@@ -26,22 +26,32 @@ class ConversationViewController: ParentViewController,
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
     
-    var langFrom, langTo, langCodeFrom, langCodeTo :String!
+    
+    var langFrom, langTo, langCodeFrom, langCodeTo, flag :String!
     var alertControllerFrom, alertControllerTo :UIAlertController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         SetupUI()
         
+        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
         speechRecognizer!.delegate = self
         SFSpeechRecognizer.requestAuthorization { (authStatus) in
             
             switch authStatus {
             case .authorized:
-//                self.leftMic.isEnabled = true
-//                self.rightMic.isEnabled = true
+                switch AVAudioSession.sharedInstance().recordPermission {
+                case AVAudioSession.RecordPermission.granted:
+                    print("Permission granted")
+                case AVAudioSession.RecordPermission.denied:
+                    print("Pemission denied")
+                case AVAudioSession.RecordPermission.undetermined:
+                    print("Request permission here")
+                    AVAudioSession.sharedInstance().requestRecordPermission({ (granted) in
+                        // Handle granted
+                    })
+                }
                 break
                 
             case .denied:
@@ -67,6 +77,8 @@ class ConversationViewController: ParentViewController,
                 
             }
         }
+        
+        
     }
     
     //MARK: IBAction    
@@ -77,12 +89,12 @@ class ConversationViewController: ParentViewController,
     
     @IBAction func SelectFrom(_ sender: Any)
     {
-        present(alertControllerFrom, animated: true, completion: nil)
+//        present(alertControllerFrom, animated: true, completion: nil)
     }
     
     @IBAction func SelectTo(_ sender: Any)
     {
-        present(alertControllerTo, animated: true, completion: nil)
+//        present(alertControllerTo, animated: true, completion: nil)
     }
     
     @IBAction func CopyFrom(_ sender: Any)
@@ -92,7 +104,7 @@ class ConversationViewController: ParentViewController,
     
     @IBAction func SynthesisFrom(_ sender: Any)
     {
-        TextToSpeech(str: textTo.text, lang: "en-US")
+        TextToSpeech(str: textFrom.text, lang: langCodeFrom)
     }
     
     @IBAction func ZoomFrom(_ sender: Any)
@@ -103,43 +115,43 @@ class ConversationViewController: ParentViewController,
     @IBAction func LeftStart(_ sender: Any)
     {
         NSLog("%@", "Left Start")
-        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
+        flag = "left"
+        loading?.removeFromSuperview()
+        ShowLoading(loadLabel: "Say something, I'm listening!")
+        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeFrom))
         startRecording()
     }
     
     @IBAction func LeftEnd(_ sender: Any)
     {
         NSLog("%@", "Left End")
+        loading?.removeFromSuperview()
         audioEngine.stop()
-        recognitionRequest?.endAudio()
-    }
-    
-    @IBAction func LeftSynthesis(_ sender: Any)
-    {
-        if audioEngine.isRunning {
-            audioEngine.stop()
-            recognitionRequest?.endAudio()
-            //            microphoneButton.isEnabled = false
-            //            microphoneButton.setTitle("Start Recording", for: .normal)
-        } else {
-            speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
-            startRecording()
-            //            microphoneButton.setTitle("Stop Recording", for: .normal)
-        }
+        recognitionRequest!.endAudio()
+        self.recognitionRequest = nil
+        self.recognitionTask = nil
+        self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textFrom.text!, langCodeFrom, langCodeTo, self.getDeviceID()))
     }
     
     @IBAction func RightStart(_ sender: Any)
     {
         NSLog("%@", "Right Start")
-        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
+        flag = "right"
+        loading?.removeFromSuperview()
+        ShowLoading(loadLabel: "Say something, I'm listening!")
+        speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeTo))
         startRecording()
     }
     
     @IBAction func RightEnd(_ sender: Any)
     {
         NSLog("%@", "Right End")
+        loading?.removeFromSuperview()
         audioEngine.stop()
-        recognitionRequest?.endAudio()
+        recognitionRequest!.endAudio()
+        self.recognitionRequest = nil
+        self.recognitionTask = nil
+        self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textTo.text!, langCodeTo, langCodeFrom, self.getDeviceID()))
     }
     
     
@@ -155,6 +167,7 @@ class ConversationViewController: ParentViewController,
         viewFrom.layer.shadowOffset = CGSize.zero
         viewFrom.layer.shadowRadius = 3
         viewFrom.layer.shadowPath = UIBezierPath(rect: viewFrom.bounds).cgPath
+        buttonFrom.setTitle(defaults.object(forKey: "LanguageFrom") as? String, for: .normal)
         
         viewTo.layer.cornerRadius = 10
         viewTo.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
@@ -163,6 +176,7 @@ class ConversationViewController: ParentViewController,
         viewTo.layer.shadowOffset = CGSize.zero
         viewTo.layer.shadowRadius = 3
         viewTo.layer.shadowPath = UIBezierPath(rect: viewTo.bounds).cgPath
+        buttonTo.setTitle(defaults.object(forKey: "LanguageTo") as? String, for: .normal)
         
         alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
         
@@ -194,8 +208,8 @@ class ConversationViewController: ParentViewController,
             alertControllerTo.addAction(sendButton)
         }
     }
+    
     func startRecording() {
-        
         if recognitionTask != nil {
             recognitionTask?.cancel()
             recognitionTask = nil
@@ -203,7 +217,7 @@ class ConversationViewController: ParentViewController,
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSession.Category.record, mode: AVAudioSession.Mode.measurement, options: .interruptSpokenAudioAndMixWithOthers)
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.voicePrompt, options: .interruptSpokenAudioAndMixWithOthers)
         } catch {
             print("audioSession properties weren't set because of an error.")
         }
@@ -224,17 +238,22 @@ class ConversationViewController: ParentViewController,
             
             if result != nil {
                 
-                self.textFrom.text = result?.bestTranscription.formattedString
+                if(self.flag == "left")
+                {
+                    self.textFrom.text = result?.bestTranscription.formattedString
+                }
+                else if(self.flag == "right")
+                {
+                    self.textTo.text = result?.bestTranscription.formattedString
+                }
                 isFinal = (result?.isFinal)!
             }
             
             if error != nil || isFinal {
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
-                
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
-                
                 //                self.microphoneButton.isEnabled = true
             }
         })
@@ -251,24 +270,21 @@ class ConversationViewController: ParentViewController,
         } catch {
             print("audioEngine couldn't start because of an error.")
         }
-        
-        //        textView.text = "Say something, I'm listening!"
+//        textView.text = "Say something, I'm listening!"
         
     }
     
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available:Bool)
     {
-        //        if available {
-        //            microphoneButton.isEnabled = true
-        //        } else {
-        //            microphoneButton.isEnabled = false
-        //        }
+//        if available {
+//            microphoneButton.isEnabled = true
+//        } else {
+//            microphoneButton.isEnabled = false
+//        }
     }
     
     
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "Zoom") {
             let vc = segue.destination as! ZoomViewController
@@ -277,4 +293,36 @@ class ConversationViewController: ParentViewController,
     }
     
 
+    //MARK: API
+    func RequestAPITranslate(urlRequest:String, params:String) -> Void
+    {
+        loading?.removeFromSuperview()
+        ShowLoading()
+        DispatchQueue.global().async
+            {
+                self.response = self.RequestAPI(urlRequest: urlRequest, params: params)
+                DispatchQueue.main.async
+                    {
+                        if((self.response?.object(forKey: "error") as? Int) == 0)
+                        {
+                            if(self.flag == "left")
+                            {
+                                self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
+                                self.TextToSpeech(str: self.textTo.text, lang: self.langCodeTo)
+                            }
+                            else if(self.flag == "right")
+                            {
+                                self.textFrom.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
+                                self.TextToSpeech(str: self.textFrom.text, lang: self.langCodeFrom)
+                            }
+                            self.flag = ""
+                        }
+                        else
+                        {
+                            
+                        }
+                        self.loading?.removeFromSuperview()
+                }
+        }
+    }
 }

@@ -19,6 +19,8 @@
 		00380815219D736B00810AF6 /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380814219D736B00810AF6 /* ParentViewController.swift */; };
 		00380818219D73C400810AF6 /* ThemeConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380817219D73C300810AF6 /* ThemeConstant.swift */; };
 		0038081A219D7E9300810AF6 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380819219D7E9300810AF6 /* FavoriteViewController.swift */; };
+		00F5920421A274B900BE4BFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5920321A274B900BE4BFF /* AVFoundation.framework */; };
+		00F5920621A2B1B800BE4BFF /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */; };
 		00F6E24E219D2193006B64C5 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6E24D219D2193006B64C5 /* ConversationViewController.swift */; };
 		00F6E251219D373E006B64C5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00F6E250219D373E006B64C5 /* Images.xcassets */; };
 		00F6E255219D54E8006B64C5 /* ZoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6E254219D54E8006B64C5 /* ZoomViewController.swift */; };
@@ -81,6 +83,8 @@
 		00380814219D736B00810AF6 /* ParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		00380817219D73C300810AF6 /* ThemeConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeConstant.swift; sourceTree = "<group>"; };
 		00380819219D7E9300810AF6 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		00F5920321A274B900BE4BFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		00F6E24D219D2193006B64C5 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		00F6E250219D373E006B64C5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		00F6E254219D54E8006B64C5 /* ZoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00F5920421A274B900BE4BFF /* AVFoundation.framework in Frameworks */,
 				00F8136F219EC70F000A5E86 /* libc++.tbd in Frameworks */,
 				00F8136D219EC706000A5E86 /* CoreImage.framework in Frameworks */,
 				00F8136A219EC6DE000A5E86 /* TesseractOCR.framework in Frameworks */,
@@ -216,6 +221,7 @@
 		00F8136B219EC706000A5E86 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00F5920321A274B900BE4BFF /* AVFoundation.framework */,
 				00F8136E219EC70F000A5E86 /* libc++.tbd */,
 				00F8136C219EC706000A5E86 /* CoreImage.framework */,
 			);
@@ -231,6 +237,7 @@
 				00F6E254219D54E8006B64C5 /* ZoomViewController.swift */,
 				00380811219D72FC00810AF6 /* PurchaseViewController.swift */,
 				00380819219D7E9300810AF6 /* FavoriteViewController.swift */,
+				00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -382,6 +389,7 @@
 				00380815219D736B00810AF6 /* ParentViewController.swift in Sources */,
 				00F6E24E219D2193006B64C5 /* ConversationViewController.swift in Sources */,
 				0001D1EB219BC93200A51B6E /* translator.xcdatamodeld in Sources */,
+				00F5920621A2B1B800BE4BFF /* LanguageViewController.swift in Sources */,
 				00380812219D72FC00810AF6 /* PurchaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,8 +571,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M2Q28X82DB;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = QM2D28M7YY;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/translator/Framework",
@@ -576,6 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tms.translator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "TMS Translator Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "translator/C Class/translator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -591,8 +601,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M2Q28X82DB;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/translator/Framework",
@@ -604,6 +615,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tms.translator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "translator/C Class/translator-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

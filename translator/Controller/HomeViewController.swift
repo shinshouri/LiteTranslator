@@ -12,6 +12,7 @@ import Vision
 class HomeViewController: ParentViewController,
                         UITableViewDelegate,
                         UITableViewDataSource,
+                        UINavigationControllerDelegate,
                         UIImagePickerControllerDelegate
 {
     //MARK: Property
@@ -23,6 +24,7 @@ class HomeViewController: ParentViewController,
     @IBOutlet weak var viewTo: UIView!
     @IBOutlet weak var labelTo: UILabel!
     @IBOutlet weak var textTo: UITextView!
+    @IBOutlet weak var buttonFavorite: UIButton!
     @IBOutlet weak var imageAds: UIImageView!
     @IBOutlet weak var viewTable: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -40,6 +42,7 @@ class HomeViewController: ParentViewController,
     var favorite:NSMutableArray! = []
     var adsUrl, langFrom, langTo, langCodeFrom, langCodeTo :String!
     var alertControllerFrom, alertControllerTo :UIAlertController!
+    var flagLang, currLang :String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +74,18 @@ class HomeViewController: ParentViewController,
             langCodeTo = "id"
             buttonTo.setTitle(langTo, for: .normal)
             labelTo.text = langTo
+            self.defaults.set(self.langFrom, forKey: "LanguageFrom")
+            self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
+            self.defaults.set(self.langTo, forKey: "LanguageTo")
+            self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
+            self.defaults.synchronize()
         }
+        
+        if ((self.defaults.object(forKey: "History") as? NSArray)?.count ?? 0 > 0) {
+            history = ((self.defaults.object(forKey: "History") as! NSArray).mutableCopy() as! NSMutableArray)
+        }
+        
+        tableView.reloadData()
     }
     
     
@@ -79,16 +93,23 @@ class HomeViewController: ParentViewController,
     @IBAction func SelectMenu(_ sender: Any)
     {
         ToggleMenu.constant = 0
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
     }
     
     @IBAction func SelectFrom(_ sender: Any)
     {
-        present(alertControllerFrom, animated: true, completion: nil)
+        flagLang = "From"
+        currLang = buttonFrom.titleLabel?.text
+        performSegue(withIdentifier: "Language", sender: self)
+//        present(alertControllerFrom, animated: true, completion: nil)
     }
     
     @IBAction func SelectTo(_ sender: Any)
     {
-        present(alertControllerTo, animated: true, completion: nil)
+        flagLang = "To"
+        currLang = buttonTo.titleLabel?.text
+        performSegue(withIdentifier: "Language", sender: self)
+//        present(alertControllerTo, animated: true, completion: nil)
     }
     
     @IBAction func Swap(_ sender: Any)
@@ -113,7 +134,7 @@ class HomeViewController: ParentViewController,
     {
         if textFrom.text.count > 0
         {
-            TextToSpeech(str: textFrom.text, lang: "en-US")
+            TextToSpeech(str: textFrom.text, lang: langCodeFrom)
         }
         else
         {
@@ -125,7 +146,7 @@ class HomeViewController: ParentViewController,
     {
         if textTo.text.count > 0
         {
-            TextToSpeech(str: textTo.text, lang: "en-US")
+            TextToSpeech(str: textTo.text, lang: langCodeTo)
         }
         else
         {
@@ -145,7 +166,16 @@ class HomeViewController: ParentViewController,
     
     @IBAction func Favorite(_ sender: Any)
     {
-        
+        if buttonFavorite.tag == 0
+        {
+            buttonFavorite.setImage(UIImage(named: "favorite icon_white outline"), for: .normal)
+            buttonFavorite.tag = 1
+        }
+        else
+        {
+            buttonFavorite.setImage(UIImage(named: "favorite icon_white"), for: .normal)
+            buttonFavorite.tag = 0
+        }
     }
     
     @IBAction func GoToConversation(_ sender: Any)
@@ -179,6 +209,7 @@ class HomeViewController: ParentViewController,
     @IBAction func GoToPurchase(_ sender: Any)
     {
         BackgroundTap()
+        performSegue(withIdentifier: "Purchase", sender: self)
     }
     
     //MARK: Function
@@ -201,6 +232,7 @@ class HomeViewController: ParentViewController,
         viewFrom.layer.shadowOffset = CGSize.zero
         viewFrom.layer.shadowRadius = 3
         viewFrom.layer.shadowPath = UIBezierPath(rect: viewFrom.bounds).cgPath
+        textFrom.returnKeyType = .go
         viewTo.layer.cornerRadius = 10
         textTo.isEditable = false
         viewTable.layer.cornerRadius = 10
@@ -217,42 +249,60 @@ class HomeViewController: ParentViewController,
         ToggleMenu.constant = -200
         imageHeight.constant = 0
         
-        alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
-        
-        for i in 0..<lang.count
+//        alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
+//        
+//        for i in 0..<lang.count
+//        {
+//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
+//                self.buttonFrom.setTitle((self.lang.object(at: i) as! String), for: .normal)
+//                self.labelFrom.text = (self.lang.object(at: i) as! String)
+//                self.langFrom = (self.lang.object(at: i) as! String)
+//                self.langCodeFrom = (self.langCode.object(at: i) as! String)
+//                self.defaults.set(self.langFrom, forKey: "LanguageFrom")
+//                self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
+//                self.defaults.synchronize()
+//            })
+//            alertControllerFrom.addAction(sendButton)
+//        }
+//        
+//        alertControllerTo = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
+//        
+//        for i in 0..<lang.count
+//        {
+//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
+//                self.buttonTo.setTitle((self.lang.object(at: i) as! String), for: .normal)
+//                self.labelTo.text = (self.lang.object(at: i) as! String)
+//                self.langTo = (self.lang.object(at: i) as! String)
+//                self.langCodeTo = (self.langCode.object(at: i) as! String)
+//                self.defaults.set(self.langTo, forKey: "LanguageTo")
+//                self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
+//                self.defaults.synchronize()
+//            })
+//            alertControllerTo.addAction(sendButton)
+//        }
+    }
+    
+    @objc func TableFavoriteTap(id:UIButton)
+    {
+        let tempDic = history.object(at: id.tag) as! NSDictionary
+        if ((tempDic.object(forKey: "favorite") as? String) == "Y") {
+            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
+            history[id.tag] = dic
+            defaults.set(history, forKey: "History")
+        } else
         {
-            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-                self.buttonFrom.setTitle((self.lang.object(at: i) as! String), for: .normal)
-                self.labelFrom.text = (self.lang.object(at: i) as! String)
-                self.langFrom = (self.lang.object(at: i) as! String)
-                self.langCodeFrom = (self.langCode.object(at: i) as! String)
-                self.defaults.set(self.langFrom, forKey: "LanguageFrom")
-                self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
-                self.defaults.synchronize()
-            })
-            alertControllerFrom.addAction(sendButton)
+            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "Y", "index":(tempDic.object(forKey: "index") as? Int)!]
+            history[id.tag] = dic
+            defaults.set(history, forKey: "History")
         }
-        
-        alertControllerTo = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
-        
-        for i in 0..<lang.count
-        {
-            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-                self.buttonTo.setTitle((self.lang.object(at: i) as! String), for: .normal)
-                self.labelTo.text = (self.lang.object(at: i) as! String)
-                self.langTo = (self.lang.object(at: i) as! String)
-                self.langCodeTo = (self.langCode.object(at: i) as! String)
-                self.defaults.set(self.langTo, forKey: "LanguageTo")
-                self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
-                self.defaults.synchronize()
-            })
-            alertControllerTo.addAction(sendButton)
-        }
+        tableView.reloadData()
     }
     
     @objc func BackgroundTap()
     {
+        self.view.endEditing(true)
         ToggleMenu.constant = -200
+        self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
     }
     
     @objc func AdsTap()
@@ -316,11 +366,11 @@ class HomeViewController: ParentViewController,
     {
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
-        cell.labelFrom?.text = "1"
+        cell.labelFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textFrom") as? String
         cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-        cell.labelTo?.text = "2"
+        cell.labelTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textTo") as? String
         cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-        if(indexPath.row%2 == 0)
+        if((history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "favorite") as? String == "Y")
         {
             cell.imageFavorite?.image = UIImage(named: "favorite icon_red")
         }
@@ -328,6 +378,8 @@ class HomeViewController: ParentViewController,
         {
             cell.imageFavorite?.image = UIImage(named: "favorite icon_red outline")
         }
+        cell.buttonImageFavorite.tag = indexPath.row
+        cell.buttonImageFavorite.addTarget(self, action: #selector(TableFavoriteTap(id:)), for: .touchUpInside)
         
         cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
         cell.layer.borderWidth = 1
@@ -353,10 +405,15 @@ class HomeViewController: ParentViewController,
     {
         if (text == "\n")
         {
-//            RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@", self.textFrom.text!, self.labelFrom.text!, self.labelTo.text!))
+//            NSLog("%@", (history.object(at: 1) as! NSDictionary).object(forKey: "textFrom") as! String)
+            if textFrom.text.count > 0
+            {
+                RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textFrom.text!, langCodeFrom, langCodeTo, self.getDeviceID()))
+            }
+            return false
         }
     
-        return textView.text.count + (text.count - range.length) <= 100;
+        return textView.text.count + (text.count - range.length) <= 100
     }
     
     //MARK: Segue Delegate
@@ -367,11 +424,31 @@ class HomeViewController: ParentViewController,
             let vc = segue.destination as! ZoomViewController
             vc.textZoom = textTo.text
         }
+        else if (segue.identifier == "Favorite")
+        {
+            let vc = segue.destination as! FavoriteViewController
+            vc.history = history.mutableCopy() as? NSMutableArray
+        }
+        else if (segue.identifier == "Conversation")
+        {
+            let vc = segue.destination as! ConversationViewController
+            vc.langFrom = self.langFrom
+            vc.langCodeFrom = self.langCodeFrom
+            vc.langTo = self.langTo
+            vc.langCodeTo =  self.langCodeTo
+        }
+        else if (segue.identifier == "Language")
+        {
+            let vc = segue.destination as! LanguageViewController
+            vc.flag = self.flagLang
+            vc.currentLang = self.currLang
+        }
     }
     
     //MARK: API
     func RequestAPITranslate(urlRequest:String, params:String) -> Void
     {
+        BackgroundTap()
         loading?.removeFromSuperview()
         ShowLoading()
         DispatchQueue.global().async
@@ -379,9 +456,17 @@ class HomeViewController: ParentViewController,
             self.response = self.RequestAPI(urlRequest: urlRequest, params: params)
             DispatchQueue.main.async
             {
-                if((self.response?.object(forKey: "is_open") as? String)! == "1")
+                if((self.response?.object(forKey: "error") as? Int) == 0)
                 {
-                            
+                    if(!self.textTo.text.contains("#") && !(self.textFrom.text == self.textTo.text))
+                    {
+                        self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
+                        let dic: NSDictionary = ["textFrom":self.textFrom.text, "textTo":self.textTo.text, "favorite": self.buttonFavorite.tag == 0 ? "N" :"Y", "index":self.history.count > 0 ? self.history.count : 0]
+                        //                    self.history.addObjects(from: [dic as Any])
+                        self.history.insert(dic, at: 0)
+                        self.defaults.set(self.history, forKey: "History")
+                        self.tableView.reloadData()
+                    }
                 }
                 else
                 {
@@ -404,7 +489,7 @@ class HomeViewController: ParentViewController,
                 let arr:NSArray = (self.response?.object(forKey: "advertise") as? NSArray)!
                 self.response = (arr.object(at: 0) as! NSDictionary)
                 
-                if((self.response?.object(forKey: "is_open") as? String)! == "1")
+                if((self.response?.object(forKey: "is_open") as? String) == "1")
                 {
                     let url = URL(string: (self.response?.object(forKey: "image_url") as? String)!)
                 
@@ -413,33 +498,20 @@ class HomeViewController: ParentViewController,
                         let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
                         DispatchQueue.main.async
                         {
-                            self.imageAds.image = UIImage(data: data!)
-                            self.adsUrl = (self.response?.object(forKey: "url") as? String)!
-                            self.imageAds.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.AdsTap)))
-                            self.imageAds.isUserInteractionEnabled = true
-                            self.imageHeight.constant = 50
+                            if((self.response?.object(forKey: "is_open") as? String)! == "1")
+                            {
+                                self.imageAds.image = UIImage(data: data!)
+                                self.adsUrl = (self.response?.object(forKey: "url") as? String)!
+                                self.imageAds.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.AdsTap)))
+                                self.imageAds.isUserInteractionEnabled = true
+                                self.imageHeight.constant = self.view.frame.size.width/6
+                            }
                             self.loading?.removeFromSuperview()
+                            
+//                            self.performSegue(withIdentifier: "Purchase", sender: self)
                         }
                     }
                 }
-            }
-        }
-    }
-    
-    func RequestAPIAppPurchaseAds(urlRequest:String, params:String) -> Void
-    {
-        loading?.removeFromSuperview()
-        ShowLoading()
-        DispatchQueue.global().async
-        {
-            self.response = self.RequestAPI(urlRequest: urlRequest, params: params)
-            DispatchQueue.main.async
-            {
-                if((self.response?.object(forKey: "is_open") as? String)! == "1")
-                {
-                    
-                }
-                self.loading?.removeFromSuperview()
             }
         }
     }

@@ -38,6 +38,13 @@ public let URL_REQUESTAPI_TRANSLATE: String = "http://47.75.13.70/translate/tran
 public let URL_REQUESTAPI_ADS: String = "http://47.75.13.70/advertising/ReqAppAd.php"
 public let URL_REQUESTAPI_APPPURCHASEADS: String = "http://47.75.13.70/app_purchase/App_purchase.php"
 
+
+//MARK : IN-APP PRODUCT
+public let INAPP_PRODUCT_MONTHLY = "com.tms.translator1"
+public let INAPP_PRODUCT_YEARLY = "com.tms.translator2"
+
+
+
 //Request
 public let STRING_SERVER_KEY_REQUEST_PRIVATE: String = "2F2B9A548B65E9D6"
 public let STRING_SERVER_KEY_REQUEST_PUBLIC: String = "C3RHC2l1BNBHBG1lCMFO"

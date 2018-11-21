@@ -14,8 +14,8 @@ class FavoriteViewController: ParentViewController,
 {
     @IBOutlet weak var tableView: UITableView!
     
-    
-    var favorite : NSArray! = []
+    var history : NSMutableArray! = []
+    var favorite : NSMutableArray! = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +23,21 @@ class FavoriteViewController: ParentViewController,
         // Do any additional setup after loading the view.
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor.clear
+        tableView.allowsSelection = false
         tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 90
         tableView.delegate = self
         tableView.dataSource = self
+        
+        for i in 0..<history.count
+        {
+            if((history.object(at: i) as? NSDictionary)?.object(forKey: "favorite") as? String == "Y")
+            {
+                let tempDic = history.object(at: i) as! NSDictionary
+                favorite.addObjects(from: [tempDic as Any])
+            }
+        }
     }
     
     
@@ -33,6 +45,30 @@ class FavoriteViewController: ParentViewController,
     @IBAction func Back(_ sender: Any)
     {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    
+    //MARK: Function
+    @objc func TableFavoriteTap(id:UIButton)
+    {
+        let alertController = ShowAlertViewController(sender: self, title: "Message", message: "Delete from favorite list?")
+        
+        let yesButton = UIAlertAction(title:"Confirm", style: .default, handler: { (action) -> Void in
+            let index = (self.favorite.object(at: id.tag) as! NSDictionary).object(forKey: "index") as! Int
+            let tempDic = self.history.object(at: index) as! NSDictionary
+            
+            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
+            self.history[index] = dic
+            self.defaults.set((self.history.mutableCopy() as! NSMutableArray), forKey: "History")
+            self.defaults.synchronize()
+            
+            self.favorite.removeObject(at: id.tag)
+            
+            self.tableView.reloadData()
+        })
+        alertController.addAction(yesButton)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     
@@ -49,15 +85,18 @@ class FavoriteViewController: ParentViewController,
     {
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
-        cell.labelFrom?.text = "1"
-        cell.labelFrom?.textColor = UIColor.white
-        cell.labelTo?.text = "2"
-        cell.labelTo?.textColor = UIColor.white
-        cell.imageFavorite?.image = UIImage(named: "favorite icon_white")
+        cell.labelFrom?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textFrom") as? String
+        cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        cell.labelTo?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textTo") as? String
+        cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        cell.imageFavorite?.image = UIImage(named: "favorite icon_red")
         
-        cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-        cell.layer.borderWidth = 3
-        cell.layer.borderColor = UIColor.white.cgColor;
+        cell.buttonImageFavorite.tag = indexPath.row
+        cell.buttonImageFavorite.addTarget(self, action: #selector(TableFavoriteTap(id:)), for: .touchUpInside)
+        
+        cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+        cell.layer.borderWidth = 1
+        cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor;
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         

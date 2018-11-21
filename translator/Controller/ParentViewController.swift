@@ -73,26 +73,36 @@ open class ParentViewController: UIViewController,
 
     
     //MARK: PROCEDURE
-    public func ShowLoading() -> Void
+    public func ShowLoading(loadLabel:String = "") -> Void
     {
         loading?.removeFromSuperview()
         loading = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
         loading?.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY, Opacity: 0.5)
         
+        if loadLabel.count > 0
+        {
+            let lblload:UILabel = UILabel(frame: CGRect(x: 0, y: self.view.frame.size.height/2+30, width: self.view.frame.size.width, height: self.view.frame.size.height/20))
+            lblload.text = loadLabel
+            lblload.textColor = .white
+            lblload.textAlignment = .center
+            loading?.addSubview(lblload)
+        }
         let ai = UIActivityIndicatorView.init(style:.whiteLarge)
         ai.startAnimating()
         ai.center = (loading?.center)!
-        
         loading?.addSubview(ai)
+        
+        
         self.view.addSubview(loading!)
     }
     
     public func TextToSpeech(str: String, lang: String) {
         let utterance = AVSpeechUtterance(string: str)
         utterance.voice = AVSpeechSynthesisVoice(language: lang)
-        utterance.rate = 0.1
+//        utterance.rate = 0.5
         
         let synthesizer = AVSpeechSynthesizer()
+        synthesizer.stopSpeaking(at: .immediate)
         synthesizer.speak(utterance)
     }
     
@@ -256,6 +266,84 @@ open class ParentViewController: UIViewController,
         return result
     }
     
+    func RequestAPIenc(urlRequest:String, params:String) -> NSDictionary
+    {
+        response =  nil
+        var result : NSDictionary = [:]
+        let group = DispatchGroup()
+        group.enter()
+        
+        DispatchQueue.global(qos: .background).async
+            {
+                let todosEndpoint: String = urlRequest
+                guard let todosURL = URL(string: todosEndpoint) else
+                {
+                    print("Error: cannot create URL")
+                    group.leave()
+                    return
+                }
+                var todosUrlRequest = URLRequest(url: todosURL)
+                todosUrlRequest.httpMethod = "POST"
+                let newTodo: String = params
+                do
+                {
+                    todosUrlRequest.httpBody = Data(newTodo.utf8)
+                } catch
+                {
+                    print("Error: cannot create JSON from todo")
+                    group.leave()
+                    return
+                }
+                
+                let session = URLSession.shared
+                
+                let task = session.dataTask(with: todosUrlRequest)
+                {
+                    (data, responses, error) in
+                    // check for any errors
+                    guard error == nil else
+                    {
+                        print("error calling GET on /todos/1")
+                        print(error!)
+                        group.leave()
+                        return
+                    }
+                    // make sure we got data
+                    guard let responseData = data else
+                    {
+                        print("Error: did not receive data")
+                        group.leave()
+                        return
+                    }
+                    // parse the result as JSON, since that's what the API provides
+                    do
+                    {
+                        let jsonString = JoDess.decode(String(data: data!, encoding: .utf8), key: STRING_KEY)
+                        let dataString = Data((jsonString?.utf8)!)
+                        guard let todo = try JSONSerialization.jsonObject(with: dataString, options: [])
+                            as? NSDictionary else
+                        {
+                            print("error trying to convert data to JSON")
+                            group.leave()
+                            return
+                        }
+                        
+                        result = todo
+                        
+                        NSLog("response : %@", result)
+                        group.leave()
+                    } catch
+                    {
+                        print("error trying to convert data to JSON")
+                        group.leave()
+                    }
+                }
+                task.resume()
+        }
+        group.wait()
+        
+        return result
+    }
     /*
     // MARK: - Navigation
 

@@ -31,3 +31,19 @@ class TableViewCellFavorite: UITableViewCell
         
     }
 }
+
+class TableViewCellLanguage: UITableViewCell
+{
+    // MARK: USER INTERFACE COMPONENT
+    
+    @IBOutlet weak var imageFavorite: UIImageView!
+    @IBOutlet weak var labelLanguage: UILabel!
+    
+    // MARK: REQUIRED
+    
+    required init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder);
+        
+    }
+}
