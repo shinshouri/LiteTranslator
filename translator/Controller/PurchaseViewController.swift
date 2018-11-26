@@ -1,8 +1,8 @@
 //
 //  PurchaseViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 15/11/18.
+//  Created by MC on 15/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
@@ -13,9 +13,9 @@ class PurchaseViewController: ParentViewController,
                             SKProductsRequestDelegate,
                             SKPaymentTransactionObserver
 {
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var buttonBuyMonthly: UIButton!
     @IBOutlet weak var buttonBuyYearly: UIButton!
+    @IBOutlet weak var labelTerms: UITextView!
+    @IBOutlet weak var buttonAgreement: UIButton!
     
     var product_id: String?
     
@@ -23,10 +23,13 @@ class PurchaseViewController: ParentViewController,
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        scrollView.contentSize = CGSize(width: self.view.frame.size.width*2, height: self.view.frame.size.height)
-        buttonBuyMonthly.layer.cornerRadius = 20
         buttonBuyYearly.layer.cornerRadius = 20
-        ChangeBG(sender: self, image: "BG iPhone 2")
+        buttonAgreement.layer.cornerRadius = 20
+        
+        ChangeBG(sender: self, image: "BG iPhone 1")
+        
+        let stringAtr: NSMutableAttributedString = NSMutableAttributedString(string: L(key: "key39"))
+        labelTerms.attributedText = stringAtr
     }
     
     
@@ -35,28 +38,12 @@ class PurchaseViewController: ParentViewController,
     {
         self.navigationController?.popViewController(animated: true)
     }
-
-    @IBAction func MonthlyPurchase(_ sender: Any)
-    {
-        loading?.removeFromSuperview()
-        ShowLoading()
-        self.product_id = INAPP_PRODUCT_MONTHLY
-        SKPaymentQueue.default().add(self)
-        if (SKPaymentQueue.canMakePayments()) {
-            let productID:NSSet = NSSet(object: self.product_id!);
-            let productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as! Set<String>);
-            productsRequest.delegate = self;
-            productsRequest.start();
-        } else {
-            print("can't make purchases");
-        }
-    }
     
     @IBAction func YearlyPurchase(_ sender: Any)
     {
         loading?.removeFromSuperview()
         ShowLoading()
-        self.product_id = INAPP_PRODUCT_YEARLY
+        self.product_id = INAPP_PRODUCT
         SKPaymentQueue.default().add(self)
         if (SKPaymentQueue.canMakePayments()) {
             let productID:NSSet = NSSet(object: self.product_id!);
@@ -68,34 +55,36 @@ class PurchaseViewController: ParentViewController,
         }
     }
     
+    @IBAction func Agreement(_ sender: Any)
+    {
+        self.OpenURL(urlStr: "")
+    }
+    
     //MARK: In App Purchase Delegate
-    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)
+    public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)
     {
         let productArr = response.products;
         NSLog("%@", productArr)
+        
         if (productArr.count == 0) {
             loading?.removeFromSuperview()
-//            [self showAlert:@"Invalid Product." title:@"Warning!" btn:@"OK" tag:0 delegate:self];
+            present(ShowAlertViewController(sender: self, title: self.L(key: "key34"), message: self.L(key: "key36")), animated: true, completion: nil)
             return;
         }
         
         var p:SKProduct? = nil
         
         for pro in productArr {
-            if (pro.productIdentifier == INAPP_PRODUCT_MONTHLY)
+            if (pro.productIdentifier == INAPP_PRODUCT)
             {
                 p = pro;
-            }
-            else if (pro.productIdentifier == INAPP_PRODUCT_YEARLY)
-            {
-                p = pro
             }
         }
         
         SKPaymentQueue.default().add(SKPayment(product: p!));
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
+    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
     {
         for transaction:AnyObject in transactions {
             if let trans:SKPaymentTransaction = transaction as? SKPaymentTransaction{
@@ -104,9 +93,7 @@ class PurchaseViewController: ParentViewController,
                     print("Product Purchased");
                     loading?.removeFromSuperview()
                     ShowLoading()
-                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
-                    SKPaymentQueue.default().remove(self)
-//                    self.RequestAPIAppPurchaseAds(urlRequest: URL_REQUESTAPI_APPPURCHASEADS, params: String(format: "bundle_id=%@", BUNDLEID))
+                    self.completeTransaction(transaction: transaction as! SKPaymentTransaction)
                     break;
                 case .failed:
                     print("Purchased Failed");
@@ -116,12 +103,24 @@ class PurchaseViewController: ParentViewController,
                 case .restored:
                     print("Already Purchased");
                     loading?.removeFromSuperview()
-//                    SKPaymentQueue.default().restoreCompletedTransactions()
+                    SKPaymentQueue.default().restoreCompletedTransactions()
                 default:
                     break;
                 }
             }
         }
+    }
+    
+    func completeTransaction(transaction:SKPaymentTransaction) -> Void {
+        SKPaymentQueue.default().finishTransaction(transaction)
+        let temptransactionReceipt = try! Data(contentsOf: Bundle.main.appStoreReceiptURL!).base64EncodedString(options: [])
+        
+        var base64:String = JoDess.encodeBase64(with: temptransactionReceipt)
+        base64 = base64.replacingOccurrences(of: "\n", with: "")
+        base64 = base64.replacingOccurrences(of: "\r", with: "")
+        base64 = base64.replacingOccurrences(of: "+", with: "%2B")
+        
+        self.RequestAPIAppPurchaseAds(urlRequest: URL_REQUESTAPI_APPPURCHASEADS, params: String(format: "receipt=%@&goods_id=%@&bundle_id=%@&uuid=%@", base64, INAPP_PRODUCT, BUNDLEID, self.getDeviceID()))
     }
     
     
@@ -134,13 +133,13 @@ class PurchaseViewController: ParentViewController,
             {
                 self.response = self.RequestAPIenc(urlRequest: urlRequest, params: params)
                 DispatchQueue.main.async
-                {
-                    KeyChainStore.save("PurchaseID", data: ((self.response?.object(forKey: "data") as! NSDictionary).object(forKey: "uuid") as? String)!)
-                    self.loading?.removeFromSuperview()
+                    {
+                        KeyChainStore.save("PurchaseID", data: ((self.response?.object(forKey: "data") as! NSDictionary).object(forKey: "uuid") as? String)!)
+                        KeyChainStore.save("ExpiredDate", data: ((self.response?.object(forKey: "data") as! NSDictionary).object(forKey: "expired_time") as? String)!)
+                        self.loading?.removeFromSuperview()
                 }
         }
     }
-    
     
     /*
     // MARK: - Navigation

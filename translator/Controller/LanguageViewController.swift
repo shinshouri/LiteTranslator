@@ -1,8 +1,8 @@
 //
 //  LanguageViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 19/11/18.
+//  Created by MC on 19/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
@@ -35,8 +35,12 @@ class LanguageViewController: ParentViewController,
         tableView.dataSource = self
         
         searchBar.delegate = self
+        searchBar.placeholder = "Search"
+        
+        lang = ((self.defaults.object(forKey: "Language") as! NSArray).mutableCopy() as! NSMutableArray)
+        langCode = ((self.defaults.object(forKey: "LanguageCode") as! NSArray).mutableCopy() as! NSMutableArray)
     }
-    
+
     
     //MARK: IBAction
     @IBAction func Back(_ sender: Any)
@@ -46,18 +50,24 @@ class LanguageViewController: ParentViewController,
     
     
     //MARK: SearchBar Delegate
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchActive = true
+//    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar)
+//    {
+//
+//    }
+
+//    func searchBarTextDidEndEditing(_ searchBar: UISearchBar)
+//    {
+//
+//    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
+    {
+        self.view.endEditing(true)
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchActive = false
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false
-    }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        self.view.endEditing(true)
     }
     
     
@@ -65,7 +75,7 @@ class LanguageViewController: ParentViewController,
         let data = lang as! Array<String>
         
         filtered = data.filter({ (text) -> Bool in
-            let tmp:NSString = text as NSString
+            let tmp:NSString = L(key: text) as NSString
             let range = tmp.range(of: searchText, options: NSString.CompareOptions.caseInsensitive)
             return range.location != NSNotFound
         })
@@ -76,6 +86,7 @@ class LanguageViewController: ParentViewController,
         else{
             searchActive = false
         }
+        
         self.tableView.reloadData()
     }
     
@@ -94,7 +105,7 @@ class LanguageViewController: ParentViewController,
         }
         else
         {
-            return lang.count
+            return lang?.count ?? 0
         }
     }
     
@@ -103,31 +114,37 @@ class LanguageViewController: ParentViewController,
         let cell:TableViewCellLanguage = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellLanguage
         
         if(searchActive){
-            cell.labelLanguage?.text = filtered[indexPath.row]
-            cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-            if currentLang == filtered[indexPath.row]
+            cell.labelLanguage?.text = L(key: filtered[indexPath.row])
+            if currentLang == L(key: filtered[indexPath.row])
             {
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
                 cell.imageFavorite?.image = UIImage(named: "checklist icon")
             }
             else
             {
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
                 cell.imageFavorite?.image = nil
             }
         }
-        else{
-            cell.labelLanguage?.text = lang.object(at: indexPath.row) as? String
-            cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-            if currentLang == (lang.object(at: indexPath.row) as? String)
+        else
+        {
+            cell.labelLanguage?.text = L(key: lang.object(at: indexPath.row) as! String)
+            if currentLang == L(key: (lang.object(at: indexPath.row) as! String))
             {
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
                 cell.imageFavorite?.image = UIImage(named: "checklist icon")
             }
             else
             {
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
                 cell.imageFavorite?.image = nil
             }
         }
         
-        cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
         cell.layer.borderWidth = 1
         cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor;
         cell.layer.cornerRadius = 10
@@ -143,33 +160,55 @@ class LanguageViewController: ParentViewController,
             if (flag == "From") {
                 self.defaults.set(filtered[indexPath.row], forKey: "LanguageFrom")
                 self.defaults.set(langCode.object(at: lang.index(of: filtered[indexPath.row])), forKey: "LanguageCodeFrom")
-                self.defaults.synchronize()
             }
             else if (flag == "To")
             {
                 self.defaults.set(filtered[indexPath.row], forKey: "LanguageTo")
                 self.defaults.set(langCode.object(at: lang.index(of: filtered[indexPath.row])), forKey: "LanguageCodeTo")
-                self.defaults.synchronize()
             }
-            currentLang = filtered[indexPath.row]
+            currentLang = L(key: filtered[indexPath.row])
+            
+            let currLangKey = filtered[indexPath.row]
+            let currLangCode:String = langCode.object(at: lang.index(of: currLangKey)) as! String
+            lang.removeObject(at: lang.index(of: currLangKey))
+            langCode.removeObject(at: langCode.index(of: currLangCode))
+            lang.insert(currLangKey, at: 0)
+            langCode.insert(currLangCode, at: 0)
+            
+            defaults.set(self.lang, forKey: "Language")
+            defaults.set(self.langCode, forKey: "LanguageCode")
+            self.defaults.synchronize()
         }
         else
         {
             if (flag == "From") {
                 self.defaults.set(lang.object(at: indexPath.row), forKey: "LanguageFrom")
                 self.defaults.set(langCode.object(at: indexPath.row), forKey: "LanguageCodeFrom")
-                self.defaults.synchronize()
             }
             else if (flag == "To")
             {
                 self.defaults.set(lang.object(at: indexPath.row), forKey: "LanguageTo")
                 self.defaults.set(langCode.object(at: indexPath.row), forKey: "LanguageCodeTo")
-                self.defaults.synchronize()
             }
-            currentLang = lang.object(at: indexPath.row) as? String
+            currentLang = L(key: lang.object(at: indexPath.row) as! String)
+            
+            let currLangKey = lang.object(at: indexPath.row) as? String
+            let currLangCode:String = langCode.object(at: indexPath.row) as! String
+            lang.removeObject(at: lang.index(of: currLangKey!))
+            langCode.removeObject(at: langCode.index(of: currLangCode))
+            lang.insert(currLangKey!, at: 0)
+            langCode.insert(currLangCode, at: 0)
+            
+            defaults.set(self.lang, forKey: "Language")
+            defaults.set(self.langCode, forKey: "LanguageCode")
+            self.defaults.synchronize()
         }
         tableView.deselectRow(at: indexPath, animated: false)
         tableView.reloadData()
+        NSLog("LanguageFrom %@", L(key: self.defaults.object(forKey: "LanguageFrom") as! String))
+        NSLog("LanguageCodeFrom %@", self.defaults.object(forKey: "LanguageCodeFrom") as! String)
+        NSLog("LanguageTo %@", L(key: self.defaults.object(forKey: "LanguageTo") as! String))
+        NSLog("LanguageCodeTo %@", self.defaults.object(forKey: "LanguageCodeTo") as! String)
     }
     
     

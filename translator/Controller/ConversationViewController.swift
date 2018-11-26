@@ -1,8 +1,8 @@
 //
 //  ConversationViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 15/11/18.
+//  Created by MC on 15/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
@@ -24,11 +24,13 @@ class ConversationViewController: ParentViewController,
     private var speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
-    private let audioEngine = AVAudioEngine()
+    private var audioEngine = AVAudioEngine()
     
     
-    var langFrom, langTo, langCodeFrom, langCodeTo, flag :String!
+    var langFrom, langTo, langCodeFrom, langCodeTo, flag, ConvertString :String!
     var alertControllerFrom, alertControllerTo :UIAlertController!
+    var seconds: Int!
+    var timer = Timer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,8 +79,6 @@ class ConversationViewController: ParentViewController,
                 
             }
         }
-        
-        
     }
     
     //MARK: IBAction    
@@ -104,7 +104,14 @@ class ConversationViewController: ParentViewController,
     
     @IBAction func SynthesisFrom(_ sender: Any)
     {
-        TextToSpeech(str: textFrom.text, lang: langCodeFrom)
+        if textFrom.text.count > 0
+        {
+            TextToSpeech(str: textFrom.text, lang: langCodeFrom)
+        }
+        else
+        {
+            present(ShowAlertViewController(sender: self, title: "Warning!", message: "No Text"), animated: true, completion: nil)
+        }
     }
     
     @IBAction func ZoomFrom(_ sender: Any)
@@ -117,20 +124,16 @@ class ConversationViewController: ParentViewController,
         NSLog("%@", "Left Start")
         flag = "left"
         loading?.removeFromSuperview()
-        ShowLoading(loadLabel: "Say something, I'm listening!")
+        ShowLoading(loadLabel: L(key: "key37"))
+        leftMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        leftMic.setTitleColor(GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY), for: .normal)
+        NSLog("%@", langCodeFrom)
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeFrom))
         startRecording()
-    }
-    
-    @IBAction func LeftEnd(_ sender: Any)
-    {
-        NSLog("%@", "Left End")
-        loading?.removeFromSuperview()
-        audioEngine.stop()
-        recognitionRequest!.endAudio()
-        self.recognitionRequest = nil
-        self.recognitionTask = nil
-        self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textFrom.text!, langCodeFrom, langCodeTo, self.getDeviceID()))
+        self.seconds = 3
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,
+                             selector: #selector(self.updateTimer),
+                             userInfo: nil, repeats: true)
     }
     
     @IBAction func RightStart(_ sender: Any)
@@ -138,20 +141,15 @@ class ConversationViewController: ParentViewController,
         NSLog("%@", "Right Start")
         flag = "right"
         loading?.removeFromSuperview()
-        ShowLoading(loadLabel: "Say something, I'm listening!")
+        ShowLoading(loadLabel: L(key: "key37"))
+        rightMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        rightMic.setTitleColor(GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY), for: .normal)
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeTo))
         startRecording()
-    }
-    
-    @IBAction func RightEnd(_ sender: Any)
-    {
-        NSLog("%@", "Right End")
-        loading?.removeFromSuperview()
-        audioEngine.stop()
-        recognitionRequest!.endAudio()
-        self.recognitionRequest = nil
-        self.recognitionTask = nil
-        self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textTo.text!, langCodeTo, langCodeFrom, self.getDeviceID()))
+        self.seconds = 3
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self,
+                            selector: #selector(self.updateTimer),
+                            userInfo: nil, repeats: true)
     }
     
     
@@ -162,50 +160,97 @@ class ConversationViewController: ParentViewController,
         
         viewFrom.layer.cornerRadius = 10
         viewFrom.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        viewFrom.layer.shadowColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        viewFrom.layer.shadowOpacity = 0.3
-        viewFrom.layer.shadowOffset = CGSize.zero
-        viewFrom.layer.shadowRadius = 3
-        viewFrom.layer.shadowPath = UIBezierPath(rect: viewFrom.bounds).cgPath
-        buttonFrom.setTitle(defaults.object(forKey: "LanguageFrom") as? String, for: .normal)
+        viewFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
+        viewFrom.layer.borderWidth = 1
+        
+        buttonFrom.setTitle(L(key: defaults.object(forKey: "LanguageFrom") as! String), for: .normal)
+        
+        leftMic.layer.cornerRadius = 10
+        leftMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor
+        leftMic.layer.borderWidth = 1
+        leftMic.setTitle(L(key: defaults.object(forKey: "LanguageFrom") as! String), for: .normal)
         
         viewTo.layer.cornerRadius = 10
         viewTo.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        viewTo.layer.shadowColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        viewTo.layer.shadowOpacity = 0.3
-        viewTo.layer.shadowOffset = CGSize.zero
-        viewTo.layer.shadowRadius = 3
-        viewTo.layer.shadowPath = UIBezierPath(rect: viewTo.bounds).cgPath
-        buttonTo.setTitle(defaults.object(forKey: "LanguageTo") as? String, for: .normal)
+        viewTo.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
+        viewTo.layer.borderWidth = 1
         
-        alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
+        buttonTo.setTitle(L(key: defaults.object(forKey: "LanguageTo") as! String), for: .normal)
         
-        for i in 0..<lang.count
+        rightMic.layer.cornerRadius = 10
+        rightMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor
+        rightMic.layer.borderWidth = 1
+        rightMic.setTitle(L(key: defaults.object(forKey: "LanguageTo") as! String), for: .normal)
+        
+//        alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
+//        
+//        for i in 0..<lang.count
+//        {
+//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
+//                self.buttonFrom.setTitle((self.lang.object(at: i) as! String), for: .normal)
+//                self.langFrom = (self.lang.object(at: i) as! String)
+//                self.langCodeFrom = (self.langCode.object(at: i) as! String)
+//                self.defaults.set(self.langFrom, forKey: "LanguageFrom")
+//                self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
+//                self.defaults.synchronize()
+//            })
+//            alertControllerFrom.addAction(sendButton)
+//        }
+//        
+//        alertControllerTo = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
+//        
+//        for i in 0..<lang.count
+//        {
+//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
+//                self.buttonTo.setTitle((self.lang.object(at: i) as! String), for: .normal)
+//                self.langTo = (self.lang.object(at: i) as! String)
+//                self.langCodeTo = (self.langCode.object(at: i) as! String)
+//                self.defaults.set(self.langTo, forKey: "LanguageTo")
+//                self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
+//                self.defaults.synchronize()
+//            })
+//            alertControllerTo.addAction(sendButton)
+//        }
+    }
+    
+    @objc func updateTimer() {
+        NSLog("%i", seconds)
+        if seconds > 0
         {
-            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-                self.buttonFrom.setTitle((self.lang.object(at: i) as! String), for: .normal)
-                self.langFrom = (self.lang.object(at: i) as! String)
-                self.langCodeFrom = (self.langCode.object(at: i) as! String)
-                self.defaults.set(self.langFrom, forKey: "LanguageFrom")
-                self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
-                self.defaults.synchronize()
-            })
-            alertControllerFrom.addAction(sendButton)
+            seconds -= 1
         }
-        
-        alertControllerTo = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
-        
-        for i in 0..<lang.count
+        else
         {
-            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-                self.buttonTo.setTitle((self.lang.object(at: i) as! String), for: .normal)
-                self.langTo = (self.lang.object(at: i) as! String)
-                self.langCodeTo = (self.langCode.object(at: i) as! String)
-                self.defaults.set(self.langTo, forKey: "LanguageTo")
-                self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
-                self.defaults.synchronize()
-            })
-            alertControllerTo.addAction(sendButton)
+            timer.invalidate()
+            let inputNode = self.audioEngine.inputNode
+            self.audioEngine.stop()
+            inputNode.removeTap(onBus: 0)
+            recognitionRequest?.endAudio()
+            self.recognitionRequest = nil
+            self.recognitionTask = nil
+            loading?.removeFromSuperview()
+            if(self.flag == "left")
+            {
+                self.leftMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                if self.ConvertString.count > 0
+                {
+                    self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.ConvertString, self.langCodeFrom, self.langCodeTo, self.getDeviceID()))
+                }
+            }
+            else if(self.flag == "right")
+            {
+                self.rightMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                if self.ConvertString.count > 0
+                {
+                    self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.ConvertString, self.langCodeTo, self.langCodeFrom, self.getDeviceID()))
+                }
+            }
+            else
+            {
+                flag = ""
+            }
         }
     }
     
@@ -217,7 +262,7 @@ class ConversationViewController: ParentViewController,
         
         let audioSession = AVAudioSession.sharedInstance()
         do {
-            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.voicePrompt, options: .interruptSpokenAudioAndMixWithOthers)
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, mode: AVAudioSession.Mode.spokenAudio, options: .defaultToSpeaker)
         } catch {
             print("audioSession properties weren't set because of an error.")
         }
@@ -236,17 +281,12 @@ class ConversationViewController: ParentViewController,
             
             var isFinal = false
             
-            if result != nil {
-                
-                if(self.flag == "left")
-                {
-                    self.textFrom.text = result?.bestTranscription.formattedString
-                }
-                else if(self.flag == "right")
-                {
-                    self.textTo.text = result?.bestTranscription.formattedString
-                }
+            if result != nil
+            {
+                NSLog("%@", (result?.bestTranscription.formattedString)!)
                 isFinal = (result?.isFinal)!
+                
+                self.ConvertString = result?.bestTranscription.formattedString
             }
             
             if error != nil || isFinal {
@@ -254,7 +294,6 @@ class ConversationViewController: ParentViewController,
                 inputNode.removeTap(onBus: 0)
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
-                //                self.microphoneButton.isEnabled = true
             }
         })
         
@@ -291,13 +330,12 @@ class ConversationViewController: ParentViewController,
             vc.textZoom = textFrom.text
         }
     }
-    
 
     //MARK: API
     func RequestAPITranslate(urlRequest:String, params:String) -> Void
     {
         loading?.removeFromSuperview()
-        ShowLoading()
+        ShowLoading(loadLabel: L(key: "key38"))
         DispatchQueue.global().async
             {
                 self.response = self.RequestAPI(urlRequest: urlRequest, params: params)
@@ -307,20 +345,27 @@ class ConversationViewController: ParentViewController,
                         {
                             if(self.flag == "left")
                             {
+                                self.textFrom.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text_source") as? String)!
                                 self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
+                                self.leftMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
                                 self.TextToSpeech(str: self.textTo.text, lang: self.langCodeTo)
                             }
                             else if(self.flag == "right")
                             {
+                                self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text_source") as? String)!
                                 self.textFrom.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
+                                self.rightMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
+                                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
                                 self.TextToSpeech(str: self.textFrom.text, lang: self.langCodeFrom)
                             }
-                            self.flag = ""
                         }
                         else
                         {
-                            
+                            self.present(self.ShowAlertViewController(sender: self, title: self.L(key: "key34"), message: self.L(key: "key35")), animated: true, completion: nil)
                         }
+                        self.ConvertString = ""
+                        self.flag = ""
                         self.loading?.removeFromSuperview()
                 }
         }

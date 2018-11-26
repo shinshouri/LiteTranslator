@@ -1,9 +1,8 @@
 //
 //  ThemeConstant.swift
-//  MCFramework
 //
 //  Created by Michael Carolius on 14/11/18.
-//  Copyright © 2018 All rights reserved.
+//  Copyright © 2018 MC. All rights reserved.
 //
 
 

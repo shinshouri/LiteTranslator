@@ -1,9 +1,8 @@
 //
 //  StringConstant.swift
-//  Brins Mobile - Customer
 //
-//  Created by Ibrahim Aziz Tejokusumo on 13/04/18.
-//  Copyright © 2018 InfoConnect Sdn. Bhd. All rights reserved.
+//  Created by Michael Carolius on 13/04/18.
+//  Copyright © 2018 MC. All rights reserved.
 //
 
 import Foundation
@@ -36,12 +35,11 @@ public let STRING_CULTURE_ENGLISH: String = "en-US"
 public let STRING_KEY: String = "LZQ1Yit8"
 public let URL_REQUESTAPI_TRANSLATE: String = "http://47.75.13.70/translate/translate.php"
 public let URL_REQUESTAPI_ADS: String = "http://47.75.13.70/advertising/ReqAppAd.php"
-public let URL_REQUESTAPI_APPPURCHASEADS: String = "http://47.75.13.70/app_purchase/App_purchase.php"
+public let URL_REQUESTAPI_APPPURCHASEADS: String = "http://47.75.13.70/user_order/AppUserOrder.php"
 
 
 //MARK : IN-APP PRODUCT
-public let INAPP_PRODUCT_MONTHLY = "com.tms.translator1"
-public let INAPP_PRODUCT_YEARLY = "com.tms.translator2"
+public let INAPP_PRODUCT = "com.tms.ltranslate1"
 
 
 

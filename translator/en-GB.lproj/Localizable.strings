@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  translator
+
+  Created by a on 22/11/18.
+  Copyright © 2018 tms. All rights reserved.
+*/
+
+key1 = "English";
+key2 = "Indonesian";
+key3 = "Chinese(Simplified)";
+key4 = "Chinese(Traditional)";
+key5 = "Arabic";
+key6 = "Catalan";
+key7 = "Croatian";
+key8 = "Czech";
+key9 = "Danish";
+key10 = "Dutch";
+key11 = "Finnish";
+key12 = "French";
+key13 = "German";
+key14 = "Greek";
+key15 = "Hindi";
+key16 = "Hungarian";
+key17 = "Italian";
+key18 = "Japanese";
+key19 = "Korean";
+key20 = "Malay";
+key21 = "Polish";
+key22 = "Portuguese";
+key23 = "Romanian";
+key24 = "Russian";
+key25 = "Slovak";
+key26 = "Spanish";
+key27 = "Swedish";
+key28 = "Thai";
+key29 = "Turkish";
+key30 = "Ukrainian";
+key31 = "Vietnamese";
+
+
+key32 = "Warning!";
+key33 = "No Text";
+key34 = "Message";
+key35 = "Invalid Response!";
+key36 = "Invalid Product!";
+key37 = "Say something, I'm listening!";
+key38 = "Processing...";
+key39 = "abcde /n /n fgjkl";

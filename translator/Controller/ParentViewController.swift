@@ -1,23 +1,22 @@
 //
 //  ParentViewController.swift
-//  MCFramework
 //
 //  Created by Michael Carolius on 31/05/18.
-//  Copyright © 2018 All rights reserved.
+//  Copyright © 2018 MC. All rights reserved.
 //
 
 import UIKit
 import AVFoundation
+import StoreKit
 
 open class ParentViewController: UIViewController,
                                 UITextViewDelegate
 {
-
     var response: NSDictionary?
     var loading: UIView?
     var defaults: UserDefaults! = UserDefaults.standard
     var picker: UIPickerView?
-    var lang, langCode : NSArray!
+    var lang, langCode : NSMutableArray!
     var bgView:UIView!
     var bgImage:UIImageView!
     
@@ -32,8 +31,39 @@ open class ParentViewController: UIViewController,
         bgView.addSubview(bgImage)
         self.view.insertSubview(bgView, at: 0)
         
-        lang = ["Afrikaans", "Albanian", "Amharic", "Arabic", "Armenian", "Azeerbaijani", "Basque", "Belarusian", "Bengali", "Bosnian", "Bulgarian", "Catalan", "Cebuano", "Chinese(Simplified)", "Chinese(Traditional)", "Corsican", "Croatian", "Czech", "Danish", "Dutch", "English", "Esperanto", "Estonian", "Finnish", "French", "Frisian", "Galician", "Georgian", "German", "Greek", "Gujarati", "Haitain Creole", "Hausa", "Hawaiian", "Hebrew", "Hindi", "Hmong", "Hungarian", "Icelandic", "Igbo", "Indonesian", "Irish", "Italian", "Japanese", "Javanese", "Kannada", "Kazakh", "Khmer", "Korean", "Kurdish", "Kyrgyz", "Lao", "Latin", "Latvian", "Lithuanian", "Luxembourgish", "Macedonian", "Malagasy", "Malay", "Malayalam", "Maltese", "Maori", "Marathi", "Mongolian", "Myanmar(Burmese)", "Nepali", "Norwegian", "Nyanja(Chichewa)", "Pashto", "Persian", "Polish", "Portuguese", "Punjabi", "Romanian", "Russian", "Samoan", "Scots Gaelic", "Serbian", "Sesotho", "Shona", "Sindhi", "Sinhala(Sinhalese)", "Slovak", "Slovenian", "Somali", "Spanish", "Sundanese", "Swahili", "Swedish", "Tagalog(Filipino)", "Tajik", "Tamil", "Telugu", "Thai", "Turkish", "Ukrainian", "Urdu", "Uzbek", "Vietnamese", "Welsh", "Xhosa", "Yiddish", "Yoruba", "Zulu"]
-        langCode = ["af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he**", "hi", "hmn", "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "te", "th", "tr", "uk", "ur", "uz", "vi", "cy", "xh", "yi", "yo", "zu"];
+        if (defaults.object(forKey: "Language") != nil && defaults.object(forKey: "LanguageCode") != nil)
+        {
+            lang = ((self.defaults.object(forKey: "Language") as! NSArray).mutableCopy() as! NSMutableArray)
+            langCode = ((self.defaults.object(forKey: "LanguageCode") as! NSArray).mutableCopy() as! NSMutableArray)
+        }
+        else
+        {
+            lang = ["key1", "key2", "key3", "key4", "key5",
+                    "key6", "key7", "key8", "key9", "key10",
+                    "key11", "key12", "key13", "key14",
+                    "key15", "key16", "key17", "key18",
+                    "key19", "key20", "key21", "key22",
+                    "key23", "key24", "key25", "key26",
+                    "key27", "key28", "key29", "key30",
+                    "key31"]
+            langCode = ["en", "id", "zh-CN", "zh-TW", "ar",
+                        "ca", "hr", "cs", "da", "nl",
+                        "fi", "fr", "de", "el",
+                        "hi", "hu", "it", "ja",
+                        "ko", "ms", "pl", "pt",
+                        "ro", "ru", "sk", "es",
+                        "sv", "th", "tr", "uk",
+                        "vi"];
+            
+
+//            "de-AT", "yue-CN", "hi-IN-translit",
+//            "hu-HU", "zh-HK", "nb-NO", "hr-HR", "he-IL",
+//            "wuu-CN", "de-CH", "de-DE", "hi-Latn",
+            
+            defaults.set(lang, forKey: "Language")
+            defaults.set(langCode, forKey: "LanguageCode")
+            defaults.synchronize()
+        }
     }
 
     override open func didReceiveMemoryWarning()
@@ -99,7 +129,9 @@ open class ParentViewController: UIViewController,
     public func TextToSpeech(str: String, lang: String) {
         let utterance = AVSpeechUtterance(string: str)
         utterance.voice = AVSpeechSynthesisVoice(language: lang)
-//        utterance.rate = 0.5
+//        utterance.rate = 0.25
+//        utterance.pitchMultiplier = 0.25
+//        utterance.volume = 1
         
         let synthesizer = AVSpeechSynthesizer()
         synthesizer.stopSpeaking(at: .immediate)
@@ -121,6 +153,11 @@ open class ParentViewController: UIViewController,
         
         KeyChainStore.save("DeviceID", data: UUID().uuidString)
         return KeyChainStore.load("DeviceID") as! String
+    }
+    
+    public func L(key:String) -> String
+    {
+        return NSLocalizedString(key, comment: "")
     }
     
     public func GeneratorUIColor(intHexColor : UInt32, Opacity : Double = 1.0) -> UIColor
@@ -171,6 +208,20 @@ open class ParentViewController: UIViewController,
 //        return UIImage.gif(name: str)!
 //    }
     
+    public func OpenURL(urlStr:String)
+    {
+        guard let url = URL(string: urlStr) else
+        {
+            return //be safe
+        }
+        
+        if #available(iOS 10.0, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
     public func StrToDict(str: String) -> NSDictionary
     {
         let data = str.data(using: String.Encoding.utf8)
@@ -187,6 +238,7 @@ open class ParentViewController: UIViewController,
     public func Base64Decoded(data:String) -> NSData {
         return NSData(base64Encoded: data, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters)!
     }
+    
     
     //MARK: API
     func RequestAPI(urlRequest:String, params:String) -> NSDictionary
@@ -207,6 +259,7 @@ open class ParentViewController: UIViewController,
                 }
                 var todosUrlRequest = URLRequest(url: todosURL)
                 todosUrlRequest.httpMethod = "POST"
+                todosUrlRequest.cachePolicy = .reloadIgnoringLocalCacheData
                 let newTodo: String = params
                 do
                 {
@@ -344,6 +397,7 @@ open class ParentViewController: UIViewController,
         
         return result
     }
+    
     /*
     // MARK: - Navigation
 

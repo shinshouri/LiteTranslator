@@ -1,19 +1,22 @@
 //
 //  ViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 14/11/18.
+//  Created by MC on 14/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
 import UIKit
 import Vision
+import StoreKit
 
 class HomeViewController: ParentViewController,
                         UITableViewDelegate,
                         UITableViewDataSource,
                         UINavigationControllerDelegate,
-                        UIImagePickerControllerDelegate
+                        UIImagePickerControllerDelegate,
+                        SKProductsRequestDelegate,
+                        SKPaymentTransactionObserver
 {
     //MARK: Property
     @IBOutlet weak var buttonFrom: UIButton!
@@ -26,12 +29,12 @@ class HomeViewController: ParentViewController,
     @IBOutlet weak var textTo: UITextView!
     @IBOutlet weak var buttonFavorite: UIButton!
     @IBOutlet weak var imageAds: UIImageView!
+    @IBOutlet weak var buttonScroll: UIButton!
     @IBOutlet weak var viewTable: UIView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var viewMenu: UIView!
     
-    @IBOutlet weak var ToggleMenu: NSLayoutConstraint!
     @IBOutlet weak var imageHeight: NSLayoutConstraint!
+    @IBOutlet weak var viewTableHeight: NSLayoutConstraint!
     
     private var textObservations = [VNTextObservation]()
     private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)
@@ -47,6 +50,7 @@ class HomeViewController: ParentViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        SKPaymentQueue.default().restoreCompletedTransactions()
         SetupUI()
         
         RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
@@ -54,23 +58,23 @@ class HomeViewController: ParentViewController,
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if((self.defaults.object(forKey: "LanguageFrom") as? String)?.count ?? 0 > 0)
+        if(self.defaults.object(forKey: "LanguageFrom") != nil)
         {
-            langFrom = (self.defaults.object(forKey: "LanguageFrom") as! String)
-            langCodeFrom = (self.defaults.object(forKey: "LanguageCodeFrom") as! String)
+            langFrom = L(key: (self.defaults.object(forKey: "LanguageFrom") as! String))
+            langCodeFrom = L(key: (self.defaults.object(forKey: "LanguageCodeFrom") as! String))
             buttonFrom.setTitle(langFrom, for: .normal)
             labelFrom.text = langFrom
-            langTo = (self.defaults.object(forKey: "LanguageTo") as! String)
-            langCodeTo = (self.defaults.object(forKey: "LanguageCodeTo") as! String)
+            langTo = L(key: (self.defaults.object(forKey: "LanguageTo") as! String))
+            langCodeTo = L(key: (self.defaults.object(forKey: "LanguageCodeTo") as! String))
             buttonTo.setTitle(langTo, for: .normal)
             labelTo.text = langTo
         } else
         {
-            langFrom = "English"
+            langFrom = L(key: "key1")
             langCodeFrom = "en"
             buttonFrom.setTitle(langFrom, for: .normal)
             labelFrom.text = langFrom
-            langTo = "Indonesian"
+            langTo = L(key: "key2")
             langCodeTo = "id"
             buttonTo.setTitle(langTo, for: .normal)
             labelTo.text = langTo
@@ -81,7 +85,7 @@ class HomeViewController: ParentViewController,
             self.defaults.synchronize()
         }
         
-        if ((self.defaults.object(forKey: "History") as? NSArray)?.count ?? 0 > 0) {
+        if (self.defaults.object(forKey: "History") != nil) {
             history = ((self.defaults.object(forKey: "History") as! NSArray).mutableCopy() as! NSMutableArray)
         }
         
@@ -90,12 +94,6 @@ class HomeViewController: ParentViewController,
     
     
     //MARK: IBAction
-    @IBAction func SelectMenu(_ sender: Any)
-    {
-        ToggleMenu.constant = 0
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
-    }
-    
     @IBAction func SelectFrom(_ sender: Any)
     {
         flagLang = "From"
@@ -138,7 +136,7 @@ class HomeViewController: ParentViewController,
         }
         else
         {
-            present(ShowAlertViewController(sender: self, title: "Warning!", message: "No Text"), animated: true, completion: nil)
+            present(ShowAlertViewController(sender: self, title: L(key: "key32"), message: L(key: "key33")), animated: true, completion: nil)
         }
     }
     
@@ -150,13 +148,20 @@ class HomeViewController: ParentViewController,
         }
         else
         {
-            present(ShowAlertViewController(sender: self, title: "Warning!", message: "No Text"), animated: true, completion: nil)
+            present(ShowAlertViewController(sender: self, title: L(key: "key32"), message: L(key: "key33")), animated: true, completion: nil)
         }
     }
     
     @IBAction func Zoom(_ sender: Any)
     {
-        performSegue(withIdentifier: "Zoom", sender: self)
+        if textTo.text.count > 0
+        {
+            performSegue(withIdentifier: "Zoom", sender: self)
+        }
+        else
+        {
+            present(ShowAlertViewController(sender: self, title: L(key: "key32"), message: L(key: "key33")), animated: true, completion: nil)
+        }
     }
     
     @IBAction func CopyTo(_ sender: Any)
@@ -164,46 +169,39 @@ class HomeViewController: ParentViewController,
         CopyText(str: textTo.text)
     }
     
-    @IBAction func Favorite(_ sender: Any)
+    @IBAction func TableScrolling(_ sender: Any)
     {
-        if buttonFavorite.tag == 0
-        {
-            buttonFavorite.setImage(UIImage(named: "favorite icon_white outline"), for: .normal)
-            buttonFavorite.tag = 1
-        }
-        else
-        {
-            buttonFavorite.setImage(UIImage(named: "favorite icon_white"), for: .normal)
-            buttonFavorite.tag = 0
-        }
+        HandleSwipeButton()
     }
     
     @IBAction func GoToConversation(_ sender: Any)
     {
-        performSegue(withIdentifier: "Conversation", sender: self)
+//        if KeyChainStore.load("ExpiredDate") != nil {
+            performSegue(withIdentifier: "Conversation", sender: self)
+//        }
+//        else
+//        {
+//            performSegue(withIdentifier: "Purchase", sender: self)
+//        }
     }
     
     @IBAction func GoToOCR(_ sender: Any)
     {
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
-            selectImageFrom("camera")
+        if KeyChainStore.load("ExpiredDate") != nil {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+                selectImageFrom("camera")
+            }
         }
-    }
-    
-    @IBAction func GoToHome(_ sender: Any)
-    {
-        BackgroundTap()
+        else
+        {
+            performSegue(withIdentifier: "Purchase", sender: self)
+        }
     }
     
     @IBAction func GoToFavorite(_ sender: Any)
     {
         BackgroundTap()
         performSegue(withIdentifier: "Favorite", sender: self)
-    }
-    
-    @IBAction func GoToOfflineTranslation(_ sender: Any)
-    {
-        BackgroundTap()
     }
     
     @IBAction func GoToPurchase(_ sender: Any)
@@ -216,70 +214,56 @@ class HomeViewController: ParentViewController,
     func SetupUI() -> Void
     {
         buttonFrom.layer.cornerRadius = 10
-//        buttonFrom.titleLabel?.numberOfLines = 0;
-//        buttonFrom.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
         buttonFrom.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        buttonFrom.layer.shadowColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        buttonFrom.layer.shadowOpacity = 0.3
-        buttonFrom.layer.shadowOffset = CGSize.zero
-        buttonFrom.layer.shadowRadius = 3
-        buttonFrom.layer.shadowPath = UIBezierPath(rect: buttonFrom.bounds).cgPath
+        buttonFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
+        buttonFrom.layer.borderWidth = 1
         buttonTo.layer.cornerRadius = 10
+        
         viewFrom.layer.cornerRadius = 10
         viewFrom.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        viewFrom.layer.shadowColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        viewFrom.layer.shadowOpacity = 0.3
-        viewFrom.layer.shadowOffset = CGSize.zero
-        viewFrom.layer.shadowRadius = 3
-        viewFrom.layer.shadowPath = UIBezierPath(rect: viewFrom.bounds).cgPath
+        viewFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
+        viewFrom.layer.borderWidth = 1
         textFrom.returnKeyType = .go
+        
         viewTo.layer.cornerRadius = 10
+        
         textTo.isEditable = false
+        
         viewTable.layer.cornerRadius = 10
-        viewTable.backgroundColor = UIColor.clear
+        
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor.clear
         tableView.allowsSelection = false
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        viewMenu.layer.cornerRadius = 10
-        viewMenu.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
         
-        ToggleMenu.constant = -200
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
+        swipeUp.direction = .up
+        self.view.addGestureRecognizer(swipeUp)
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
+        swipeDown.direction = .down
+        self.view.addGestureRecognizer(swipeDown)
+
         imageHeight.constant = 0
-        
-//        alertControllerFrom = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
-//        
-//        for i in 0..<lang.count
-//        {
-//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-//                self.buttonFrom.setTitle((self.lang.object(at: i) as! String), for: .normal)
-//                self.labelFrom.text = (self.lang.object(at: i) as! String)
-//                self.langFrom = (self.lang.object(at: i) as! String)
-//                self.langCodeFrom = (self.langCode.object(at: i) as! String)
-//                self.defaults.set(self.langFrom, forKey: "LanguageFrom")
-//                self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
-//                self.defaults.synchronize()
-//            })
-//            alertControllerFrom.addAction(sendButton)
-//        }
-//        
-//        alertControllerTo = ShowAlertSheetViewController(sender: self, title: "", message: "Select Language")
-//        
-//        for i in 0..<lang.count
-//        {
-//            let sendButton = UIAlertAction(title:(self.lang.object(at: i) as! String), style: .default, handler: { (action) -> Void in
-//                self.buttonTo.setTitle((self.lang.object(at: i) as! String), for: .normal)
-//                self.labelTo.text = (self.lang.object(at: i) as! String)
-//                self.langTo = (self.lang.object(at: i) as! String)
-//                self.langCodeTo = (self.langCode.object(at: i) as! String)
-//                self.defaults.set(self.langTo, forKey: "LanguageTo")
-//                self.defaults.set(self.langCodeTo, forKey: "LanguageCodeTo")
-//                self.defaults.synchronize()
-//            })
-//            alertControllerTo.addAction(sendButton)
-//        }
+    }
+    
+    @objc func HandleSwipeButton()
+    {
+        if viewTableHeight.constant == 5
+        {
+            UIView.animate(withDuration: 0.5, animations:{() -> Void in
+                self.viewTableHeight.constant = self.imageHeight.constant == 0 ? -(self.view.frame.size.height/1.83) : -(self.view.frame.size.height/1.57)
+                self.view.layoutIfNeeded()})
+            buttonScroll.setImage(UIImage(named: "down arrow"), for: .normal)
+        }
+        else
+        {
+            UIView.animate(withDuration: 0.5, animations:{() -> Void in
+                self.viewTableHeight.constant = 5
+                self.view.layoutIfNeeded()})
+            buttonScroll.setImage(UIImage(named: "up arrow"), for: .normal)
+        }
     }
     
     @objc func TableFavoriteTap(id:UIButton)
@@ -301,28 +285,82 @@ class HomeViewController: ParentViewController,
     @objc func BackgroundTap()
     {
         self.view.endEditing(true)
-        ToggleMenu.constant = -200
         self.view.removeGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
     }
     
     @objc func AdsTap()
     {
-        guard let url = URL(string: adsUrl) else
-        {
-            return //be safe
+        self.OpenURL(urlStr: adsUrl)
+    }
+    
+    
+    //MARK: In App Purchase Delegate
+    public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse)
+    {
+        let productArr = response.products;
+        NSLog("%@", productArr)
+        
+        if (productArr.count == 0) {
+            loading?.removeFromSuperview()
+            present(ShowAlertViewController(sender: self, title: self.L(key: "key34"), message: self.L(key: "key36")), animated: true, completion: nil)
+            return;
         }
         
-        if #available(iOS 10.0, *) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        } else {
-            UIApplication.shared.openURL(url)
+        var p:SKProduct? = nil
+        
+        for pro in productArr {
+            if (pro.productIdentifier == INAPP_PRODUCT)
+            {
+                p = pro;
+            }
+        }
+        
+        SKPaymentQueue.default().add(SKPayment(product: p!));
+    }
+    
+    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction])
+    {
+        for transaction:AnyObject in transactions {
+            if let trans:SKPaymentTransaction = transaction as? SKPaymentTransaction{
+                switch trans.transactionState {
+                case .purchased:
+                    print("Product Purchased");
+                    loading?.removeFromSuperview()
+                    ShowLoading()
+                    self.completeTransaction(transaction: transaction as! SKPaymentTransaction)
+                    break;
+                case .failed:
+                    print("Purchased Failed");
+                    loading?.removeFromSuperview()
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    break;
+                case .restored:
+                    print("Already Purchased");
+                    loading?.removeFromSuperview()
+                    SKPaymentQueue.default().restoreCompletedTransactions()
+                default:
+                    break;
+                }
+            }
         }
     }
+    
+    func completeTransaction(transaction:SKPaymentTransaction) -> Void {
+        SKPaymentQueue.default().finishTransaction(transaction)
+        let temptransactionReceipt:String = try! String(data:Data(contentsOf: Bundle.main.appStoreReceiptURL!), encoding: String.Encoding.utf8)!
+        var base64:String = JoDess.encodeBase64(with: temptransactionReceipt)
+        base64 = base64.replacingOccurrences(of: "\n", with: "")
+        base64 = base64.replacingOccurrences(of: "\r", with: "")
+        base64 = base64.replacingOccurrences(of: "+", with: "%2B")
+        
+        self.RequestAPIAppPurchaseAds(urlRequest: URL_REQUESTAPI_APPPURCHASEADS, params: String(format: "receipt=%@&good_id=%@&bundle_id=%@&uuid=%@", base64, INAPP_PRODUCT, BUNDLEID, self.getDeviceID()))
+    }
+    
     
     //MARK: imagePickerController Delegate
     func selectImageFrom(_ source: String){
         imagePicker =  UIImagePickerController()
-        imagePicker.delegate = self as? UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         switch source {
         case "camera":
             imagePicker.sourceType = .camera
@@ -338,19 +376,33 @@ class HomeViewController: ParentViewController,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
     {
         imageTake = nil
-        imageTake = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage)!
+        imageTake = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage)
         picker.dismiss(animated: true, completion: nil)
         handleWithTesseract(image: imageTake)
     }
     
     func handleWithTesseract(image: UIImage) {
+//        let stillImageFilter:GPUImageAdaptiveThresholdFilter
+//        stillImageFilter.blurRadiusInPixels = 4.0 // adjust this to tweak the blur radius of the filter, defaults to 4.0
+//
+//        // Retrieve the filtered image from the filter
+//        let filteredImage:UIImage = stillImageFilter.
+//        [stillImageFilter imageByFilteringImage:image];
+//
+//        // Give Tesseract the filtered image
+//        tesseract.image = filteredImage;
+        
+        
         self.tesseract?.image = image.g8_blackAndWhite()
-        self.tesseract?.setVariableValue("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz- ", forKey: "tessedit_char_whitelist")
+        self.tesseract?.setVariableValue("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-", forKey: "tessedit_char_whitelist")
         self.tesseract?.recognize()
         
         textFrom.text = tesseract?.recognizedText ?? ""
+        if textFrom.text.count > 0
+        {
+            RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textFrom.text!, langCodeFrom, langCodeTo, self.getDeviceID()))
+        }
         NSLog("%@", textFrom.text)
-        //        delegate?.ocrService(self, didDetect: text)
     }
     
     //MARK: Tableview Delegate
@@ -462,7 +514,7 @@ class HomeViewController: ParentViewController,
                     {
                         self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
                         let dic: NSDictionary = ["textFrom":self.textFrom.text, "textTo":self.textTo.text, "favorite": self.buttonFavorite.tag == 0 ? "N" :"Y", "index":self.history.count > 0 ? self.history.count : 0]
-                        //                    self.history.addObjects(from: [dic as Any])
+//                        self.history.addObjects(from: [dic as Any])
                         self.history.insert(dic, at: 0)
                         self.defaults.set(self.history, forKey: "History")
                         self.tableView.reloadData()
@@ -470,7 +522,7 @@ class HomeViewController: ParentViewController,
                 }
                 else
                 {
-                    
+                    self.present(self.ShowAlertViewController(sender: self, title: self.L(key: "key34"), message: self.L(key: "key35")), animated: true, completion: nil)
                 }
                 self.loading?.removeFromSuperview()
             }
@@ -486,6 +538,7 @@ class HomeViewController: ParentViewController,
             self.response = self.RequestAPI(urlRequest: urlRequest, params: params)
             DispatchQueue.main.async
             {
+                NSLog("%@", self.response!)
                 let arr:NSArray = (self.response?.object(forKey: "advertise") as? NSArray)!
                 self.response = (arr.object(at: 0) as! NSDictionary)
                 
@@ -498,21 +551,34 @@ class HomeViewController: ParentViewController,
                         let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
                         DispatchQueue.main.async
                         {
-                            if((self.response?.object(forKey: "is_open") as? String)! == "1")
-                            {
-                                self.imageAds.image = UIImage(data: data!)
-                                self.adsUrl = (self.response?.object(forKey: "url") as? String)!
-                                self.imageAds.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.AdsTap)))
-                                self.imageAds.isUserInteractionEnabled = true
-                                self.imageHeight.constant = self.view.frame.size.width/6
-                            }
-                            self.loading?.removeFromSuperview()
-                            
-//                            self.performSegue(withIdentifier: "Purchase", sender: self)
+                            self.imageAds.image = UIImage(data: data!)
+                            self.adsUrl = (self.response?.object(forKey: "url") as? String)!
+                            self.imageAds.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.AdsTap)))
+                            self.imageAds.isUserInteractionEnabled = true
+                            self.imageHeight.constant = self.view.frame.size.width/6
                         }
                     }
                 }
+                self.loading?.removeFromSuperview()
+                
+                self.performSegue(withIdentifier: "Purchase", sender: self)
             }
+        }
+    }
+    
+    func RequestAPIAppPurchaseAds(urlRequest:String, params:String) -> Void
+    {
+        loading?.removeFromSuperview()
+        ShowLoading()
+        DispatchQueue.global().async
+            {
+                self.response = self.RequestAPIenc(urlRequest: urlRequest, params: params)
+                DispatchQueue.main.async
+                    {
+                        KeyChainStore.save("PurchaseID", data: ((self.response?.object(forKey: "data") as! NSDictionary).object(forKey: "uuid") as? String)!)
+                        KeyChainStore.save("ExpiredDate", data: ((self.response?.object(forKey: "data") as! NSDictionary).object(forKey: "expired_time") as? String)!)
+                        self.loading?.removeFromSuperview()
+                }
         }
     }
 }

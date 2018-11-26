@@ -1,8 +1,8 @@
 //
 //  FavoriteViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 15/11/18.
+//  Created by MC on 15/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
@@ -73,11 +73,13 @@ class FavoriteViewController: ParentViewController,
     
     
     //MARK: Tableview Delegate
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int
+    {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         return favorite.count
     }
     
@@ -108,7 +110,8 @@ class FavoriteViewController: ParentViewController,
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
         return 90
     }
     /*

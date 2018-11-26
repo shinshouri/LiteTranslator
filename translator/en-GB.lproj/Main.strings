@@ -1,0 +1,92 @@
+
+/* Class = "UILabel"; text = "Indonesian"; ObjectID = "1oe-d7-s6o"; */
+"1oe-d7-s6o.text" = "Indonesian";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "2Jd-ia-zeV"; */
+"2Jd-ia-zeV.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "4Ct-jZ-asN"; */
+"4Ct-jZ-asN.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "BUY NOW!"; ObjectID = "5OW-ZF-hNC"; */
+"5OW-ZF-hNC.normalTitle" = "Free trial for 3 days";
+
+/* Class = "UILabel"; text = "Favorite"; ObjectID = "62q-fA-JpN"; */
+"62q-fA-JpN.text" = "Favorite";
+
+/* Class = "UILabel"; text = "English"; ObjectID = "B4S-hs-Bn2"; */
+"B4S-hs-Bn2.text" = "English";
+
+/* Class = "UILabel"; text = "this bundle contains:"; ObjectID = "DSa-Ob-yxs"; */
+"DSa-Ob-yxs.text" = "this bundle contains:";
+
+/* Class = "UILabel"; text = "Purchase"; ObjectID = "FOy-qw-fZY"; */
+"FOy-qw-fZY.text" = "Purchase";
+
+/* Class = "UILabel"; text = "Favorite"; ObjectID = "GPB-SX-YAU"; */
+"GPB-SX-YAU.text" = "Favorite";
+
+/* Class = "UIButton"; normalTitle = "English"; ObjectID = "IPr-dx-IFO"; */
+"IPr-dx-IFO.normalTitle" = "English";
+
+/* Class = "UILabel"; text = "Purchase"; ObjectID = "KiC-bg-OT1"; */
+"KiC-bg-OT1.text" = "Purchase";
+
+/* Class = "UIButton"; normalTitle = "Left"; ObjectID = "KqP-ee-Xfl"; */
+"KqP-ee-Xfl.normalTitle" = "Left";
+
+/* Class = "UIButton"; normalTitle = "Indonesian"; ObjectID = "L6j-x8-kgv"; */
+"L6j-x8-kgv.normalTitle" = "Indonesian";
+
+/* Class = "UILabel"; text = "Direct translate from photo"; ObjectID = "LSz-wQ-ksh"; */
+"LSz-wQ-ksh.text" = "Direct translate from photo";
+
+/* Class = "UILabel"; text = "Conversation"; ObjectID = "Nco-v1-IqR"; */
+"Nco-v1-IqR.text" = "Conversation";
+
+/* Class = "UIButton"; normalTitle = "Chinese"; ObjectID = "NfV-ap-3Ci"; */
+"NfV-ap-3Ci.normalTitle" = "Chinese";
+
+/* Class = "UILabel"; text = "No Ads"; ObjectID = "Nqb-Za-ZZv"; */
+"Nqb-Za-ZZv.text" = "No Ads";
+
+/* Class = "UILabel"; text = "Real-time translate"; ObjectID = "Q3Y-pP-fev"; */
+"Q3Y-pP-fev.text" = "Real-time translate";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "QAu-R6-KYR"; */
+"QAu-R6-KYR.text" = "Label";
+
+/* Class = "UILabel"; text = "Home"; ObjectID = "QqR-SH-7tL"; */
+"QqR-SH-7tL.text" = "Home";
+
+/* Class = "UILabel"; text = "Live voice translation"; ObjectID = "XPe-lZ-SyX"; */
+"XPe-lZ-SyX.text" = "Live voice translation";
+
+/* Class = "UIButton"; normalTitle = "Indonesian"; ObjectID = "YqV-i9-hwq"; */
+"YqV-i9-hwq.normalTitle" = "Indonesian";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "Zkz-ui-CZS"; */
+"Zkz-ui-CZS.text" = "Language";
+
+/* Class = "UILabel"; text = "Lite Translate"; ObjectID = "c5N-dj-0Eg"; */
+"c5N-dj-0Eg.text" = "Lite Translate";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "ieq-vp-0vh"; */
+"ieq-vp-0vh.text" = "Label";
+
+/* Class = "UILabel"; text = "This is only $1190 a year!"; ObjectID = "mG5-Wd-Uu3"; */
+"mG5-Wd-Uu3.text" = "This is only ¥298 a year!";
+
+/* Class = "UIButton"; normalTitle = "Right"; ObjectID = "pbU-pU-yle"; */
+"pbU-pU-yle.normalTitle" = "Right";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "qVC-Zq-7MS"; */
+"qVC-Zq-7MS.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "rdR-7J-W9E"; */
+"rdR-7J-W9E.text" = "Label";
+
+/* Class = "UILabel"; text = "1 Year Bundle!"; ObjectID = "w0W-OA-wz5"; */
+"w0W-OA-wz5.text" = "1 Year Bundle!";
+
+"KNW-B1-tbE.text" = "Automatic renewal service description\n\nPayment: The user confirms the payment and accounts for the iTunes account;\n\nCancel renewal: To cancel the renewal, please manually disable the automatic renewal function in iTunes/Apple ID settings management 24 hours before the current subscription period expires. If you cancel within 24 hours before expiration, the subscription fee will be charged.\n\nRenewal fee: Apple's iTunes account will be charged within 24 hours before expiration. After the deduction is successful, the subscription period is postponed for one subscription period.";

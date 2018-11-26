@@ -1,8 +1,8 @@
 //
 //  ZoomViewController.swift
-//  translator
+//  Lite Translate
 //
-//  Created by a on 15/11/18.
+//  Created by MC on 15/11/18.
 //  Copyright © 2018 tms. All rights reserved.
 //
 
@@ -22,9 +22,10 @@ class ZoomViewController: UIViewController {
 //        let value = UIInterfaceOrientation.landscapeLeft.rawValue
 //        UIDevice.current.setValue(value, forKey: "orientation")        
         ZoomLabel.adjustsFontSizeToFitWidth = true
-        ZoomLabel.minimumScaleFactor = 0.1
+        ZoomLabel.minimumScaleFactor = 0.01
         ZoomLabel.numberOfLines = 0
         ZoomLabel.text = textZoom
+        
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.BackgroundTap)))
         
         appDel.myOrientation = .landscape

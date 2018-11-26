@@ -21,6 +21,8 @@
 		0038081A219D7E9300810AF6 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380819219D7E9300810AF6 /* FavoriteViewController.swift */; };
 		00F5920421A274B900BE4BFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5920321A274B900BE4BFF /* AVFoundation.framework */; };
 		00F5920621A2B1B800BE4BFF /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */; };
+		00F59B2C21A6B040002F85EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F59B2E21A6B040002F85EA /* Localizable.strings */; };
+		00F59B3121A6B0F8002F85EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F59B3321A6B0F8002F85EA /* Localizable.strings */; };
 		00F6E24E219D2193006B64C5 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6E24D219D2193006B64C5 /* ConversationViewController.swift */; };
 		00F6E251219D373E006B64C5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00F6E250219D373E006B64C5 /* Images.xcassets */; };
 		00F6E255219D54E8006B64C5 /* ZoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F6E254219D54E8006B64C5 /* ZoomViewController.swift */; };
@@ -30,7 +32,6 @@
 		00F8136A219EC6DE000A5E86 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F81369219EC6DE000A5E86 /* TesseractOCR.framework */; };
 		00F8136D219EC706000A5E86 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F8136C219EC706000A5E86 /* CoreImage.framework */; };
 		00F8136F219EC70F000A5E86 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F8136E219EC70F000A5E86 /* libc++.tbd */; };
-		00F81372219ECA11000A5E86 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 00F81371219ECA11000A5E86 /* tessdata */; };
 		00F81374219ECDD4000A5E86 /* LayoutStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F81373219ECDD4000A5E86 /* LayoutStyle.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,10 @@
 		00380819219D7E9300810AF6 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		00F5920321A274B900BE4BFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
+		00F59B2821A6AF92002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		00F59B2921A6AF92002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		00F59B2D21A6B040002F85EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00F59B3221A6B0F8002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		00F6E24D219D2193006B64C5 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		00F6E250219D373E006B64C5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		00F6E254219D54E8006B64C5 /* ZoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomViewController.swift; sourceTree = "<group>"; };
@@ -97,8 +102,9 @@
 		00F81369219EC6DE000A5E86 /* TesseractOCR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = "<group>"; };
 		00F8136C219EC706000A5E86 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		00F8136E219EC70F000A5E86 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
-		00F81371219ECA11000A5E86 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tessdata; path = "../../../../../Downloads/Tesseract Resources/tessdata"; sourceTree = "<group>"; };
 		00F81373219ECDD4000A5E86 /* LayoutStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutStyle.swift; sourceTree = "<group>"; };
+		00FF071D21A80D9A00025C15 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		00FF071E21A80D9A00025C15 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Main.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,7 +162,6 @@
 			children = (
 				0001D1E2219BC93200A51B6E /* AppDelegate.swift */,
 				0001D1EC219BC93400A51B6E /* Assets.xcassets */,
-				00F81371219ECA11000A5E86 /* tessdata */,
 				00F8135E219E6DBA000A5E86 /* C Class */,
 				00380816219D73A900810AF6 /* Constant */,
 				00F81370219EC744000A5E86 /* Controller */,
@@ -166,6 +171,8 @@
 				0001D1EE219BC93400A51B6E /* LaunchScreen.storyboard */,
 				0001D1E6219BC93200A51B6E /* Main.storyboard */,
 				0001D1E9219BC93200A51B6E /* translator.xcdatamodeld */,
+				00F59B2E21A6B040002F85EA /* Localizable.strings */,
+				00F59B3321A6B0F8002F85EA /* Localizable.strings */,
 			);
 			path = translator;
 			sourceTree = "<group>";
@@ -330,6 +337,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"en-GB",
 			);
 			mainGroup = 0001D1D6219BC93200A51B6E;
 			productRefGroup = 0001D1E0219BC93200A51B6E /* Products */;
@@ -349,8 +357,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0001D1F0219BC93400A51B6E /* LaunchScreen.storyboard in Resources */,
+				00F59B2C21A6B040002F85EA /* Localizable.strings in Resources */,
 				00F6E251219D373E006B64C5 /* Images.xcassets in Resources */,
-				00F81372219ECA11000A5E86 /* tessdata in Resources */,
+				00F59B3121A6B0F8002F85EA /* Localizable.strings in Resources */,
 				0001D1ED219BC93400A51B6E /* Assets.xcassets in Resources */,
 				0001D1E8219BC93200A51B6E /* Main.storyboard in Resources */,
 			);
@@ -430,6 +439,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				0001D1E7219BC93200A51B6E /* Base */,
+				00F59B2921A6AF92002F85EA /* zh-Hans */,
+				00FF071E21A80D9A00025C15 /* en-GB */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -438,8 +449,26 @@
 			isa = PBXVariantGroup;
 			children = (
 				0001D1EF219BC93400A51B6E /* Base */,
+				00F59B2821A6AF92002F85EA /* zh-Hans */,
+				00FF071D21A80D9A00025C15 /* en-GB */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		00F59B2E21A6B040002F85EA /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00F59B2D21A6B040002F85EA /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		00F59B3321A6B0F8002F85EA /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				00F59B3221A6B0F8002F85EA /* zh-Hans */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -450,6 +479,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -512,6 +542,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -572,7 +603,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = QM2D28M7YY;
+				DEVELOPMENT_TEAM = 49ARSD6L9L;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -583,9 +614,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tms.translator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tms.ltranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "TMS Translator Dev";
+				PROVISIONING_PROFILE_SPECIFIER = ltranslatedev;
 				SWIFT_OBJC_BRIDGING_HEADER = "translator/C Class/translator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -601,8 +632,9 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 49ARSD6L9L;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -613,9 +645,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tms.translator;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tms.ltranslate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = ltranslatedis;
 				SWIFT_OBJC_BRIDGING_HEADER = "translator/C Class/translator-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
