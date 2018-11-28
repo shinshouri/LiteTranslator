@@ -11,10 +11,11 @@
 		0001D1E5219BC93200A51B6E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0001D1E4219BC93200A51B6E /* HomeViewController.swift */; };
 		0001D1E8219BC93200A51B6E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0001D1E6219BC93200A51B6E /* Main.storyboard */; };
 		0001D1EB219BC93200A51B6E /* translator.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0001D1E9219BC93200A51B6E /* translator.xcdatamodeld */; };
-		0001D1ED219BC93400A51B6E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0001D1EC219BC93400A51B6E /* Assets.xcassets */; };
 		0001D1F0219BC93400A51B6E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0001D1EE219BC93400A51B6E /* LaunchScreen.storyboard */; };
 		0001D1FB219BC93400A51B6E /* translatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0001D1FA219BC93400A51B6E /* translatorTests.swift */; };
 		0001D206219BC93400A51B6E /* translatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0001D205219BC93400A51B6E /* translatorUITests.swift */; };
+		00042BAB21AE4A3900334394 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0001D1EC219BC93400A51B6E /* Assets.xcassets */; };
+		0011A3FC21ACE6480073AB47 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 0011A3FB21ACE6480073AB47 /* tessdata */; };
 		00380812219D72FC00810AF6 /* PurchaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380811219D72FC00810AF6 /* PurchaseViewController.swift */; };
 		00380815219D736B00810AF6 /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380814219D736B00810AF6 /* ParentViewController.swift */; };
 		00380818219D73C400810AF6 /* ThemeConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380817219D73C300810AF6 /* ThemeConstant.swift */; };
@@ -80,14 +81,15 @@
 		0001D201219BC93400A51B6E /* translatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = translatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0001D205219BC93400A51B6E /* translatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = translatorUITests.swift; sourceTree = "<group>"; };
 		0001D207219BC93400A51B6E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00042BAA21AE3F5500334394 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		0011A3FB21ACE6480073AB47 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tessdata; path = "../../../../../Downloads/Tesseract Resources/tessdata"; sourceTree = "<group>"; };
+		0011A40721AD4F9F0073AB47 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		00380811219D72FC00810AF6 /* PurchaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseViewController.swift; sourceTree = "<group>"; };
 		00380814219D736B00810AF6 /* ParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		00380817219D73C300810AF6 /* ThemeConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeConstant.swift; sourceTree = "<group>"; };
 		00380819219D7E9300810AF6 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		00F5920321A274B900BE4BFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
-		00F59B2821A6AF92002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		00F59B2921A6AF92002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		00F59B2D21A6B040002F85EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		00F59B3221A6B0F8002F85EA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		00F6E24D219D2193006B64C5 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
@@ -103,8 +105,6 @@
 		00F8136C219EC706000A5E86 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		00F8136E219EC70F000A5E86 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		00F81373219ECDD4000A5E86 /* LayoutStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutStyle.swift; sourceTree = "<group>"; };
-		00FF071D21A80D9A00025C15 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		00FF071E21A80D9A00025C15 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Main.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +162,7 @@
 			children = (
 				0001D1E2219BC93200A51B6E /* AppDelegate.swift */,
 				0001D1EC219BC93400A51B6E /* Assets.xcassets */,
+				0011A3FB21ACE6480073AB47 /* tessdata */,
 				00F8135E219E6DBA000A5E86 /* C Class */,
 				00380816219D73A900810AF6 /* Constant */,
 				00F81370219EC744000A5E86 /* Controller */,
@@ -337,7 +338,7 @@
 			knownRegions = (
 				en,
 				Base,
-				"en-GB",
+				"zh-Hans",
 			);
 			mainGroup = 0001D1D6219BC93200A51B6E;
 			productRefGroup = 0001D1E0219BC93200A51B6E /* Products */;
@@ -359,8 +360,9 @@
 				0001D1F0219BC93400A51B6E /* LaunchScreen.storyboard in Resources */,
 				00F59B2C21A6B040002F85EA /* Localizable.strings in Resources */,
 				00F6E251219D373E006B64C5 /* Images.xcassets in Resources */,
+				0011A3FC21ACE6480073AB47 /* tessdata in Resources */,
+				00042BAB21AE4A3900334394 /* Assets.xcassets in Resources */,
 				00F59B3121A6B0F8002F85EA /* Localizable.strings in Resources */,
-				0001D1ED219BC93400A51B6E /* Assets.xcassets in Resources */,
 				0001D1E8219BC93200A51B6E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -439,8 +441,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				0001D1E7219BC93200A51B6E /* Base */,
-				00F59B2921A6AF92002F85EA /* zh-Hans */,
-				00FF071E21A80D9A00025C15 /* en-GB */,
+				0011A40721AD4F9F0073AB47 /* zh-Hans */,
+				00042BAA21AE3F5500334394 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -449,8 +451,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				0001D1EF219BC93400A51B6E /* Base */,
-				00F59B2821A6AF92002F85EA /* zh-Hans */,
-				00FF071D21A80D9A00025C15 /* en-GB */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

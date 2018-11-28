@@ -22,17 +22,13 @@ public let STRING_REGULAREXPRESSION_MOBILEPHONE: String = "\\+" +
 "[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210" +
 "]|2[70]|7|1)\\d{1,14}$"
 
-public let BUNDLEID: String = Bundle.main.bundleIdentifier!
-
-//MARK : LANGUAGE CULTURE
-
-public let STRING_CULTURE_INDONESIAN: String = "id-ID"
-public let STRING_CULTURE_ENGLISH: String = "en-US"
-
 
 //MARK : KEY
-
+public let BUNDLEID: String = Bundle.main.bundleIdentifier!
 public let STRING_KEY: String = "LZQ1Yit8"
+
+
+//MARK : URL
 public let URL_REQUESTAPI_TRANSLATE: String = "http://47.75.13.70/translate/translate.php"
 public let URL_REQUESTAPI_ADS: String = "http://47.75.13.70/advertising/ReqAppAd.php"
 public let URL_REQUESTAPI_APPPURCHASEADS: String = "http://47.75.13.70/user_order/AppUserOrder.php"
@@ -40,6 +36,10 @@ public let URL_REQUESTAPI_APPPURCHASEADS: String = "http://47.75.13.70/user_orde
 
 //MARK : IN-APP PRODUCT
 public let INAPP_PRODUCT = "com.tms.ltranslate1"
+
+
+//MARK : TABLE COREDATA
+public let TABLE_LANGUAGE = "LanguageTable"
 
 
 

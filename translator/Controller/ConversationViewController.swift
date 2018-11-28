@@ -27,7 +27,7 @@ class ConversationViewController: ParentViewController,
     private var audioEngine = AVAudioEngine()
     
     
-    var langFrom, langTo, langCodeFrom, langCodeTo, flag, ConvertString :String!
+    var langFrom, langTo, langCodeFrom, langCodeTo, flag, ConvertString, zoomString :String!
     var alertControllerFrom, alertControllerTo :UIAlertController!
     var seconds: Int!
     var timer = Timer()
@@ -43,7 +43,8 @@ class ConversationViewController: ParentViewController,
             
             switch authStatus {
             case .authorized:
-                switch AVAudioSession.sharedInstance().recordPermission {
+                switch AVAudioSession.sharedInstance().recordPermission
+                {
                 case AVAudioSession.RecordPermission.granted:
                     print("Permission granted")
                 case AVAudioSession.RecordPermission.denied:
@@ -57,20 +58,14 @@ class ConversationViewController: ParentViewController,
                 break
                 
             case .denied:
-//                self.leftMic.isEnabled = false
-//                self.rightMic.isEnabled = false
                 print("User denied access to speech recognition")
                 break
                 
             case .restricted:
-//                self.leftMic.isEnabled = false
-//                self.rightMic.isEnabled = false
                 print("Speech recognition restricted on this device")
                 break
                 
             case .notDetermined:
-//                self.leftMic.isEnabled = false
-//                self.rightMic.isEnabled = false
                 print("Speech recognition not yet authorized")
                 break
             }
@@ -97,9 +92,24 @@ class ConversationViewController: ParentViewController,
 //        present(alertControllerTo, animated: true, completion: nil)
     }
     
+    @IBAction func ShareFrom(_ sender: Any)
+    {
+        Share(shareString: textFrom.text)
+    }
+    
+    @IBAction func ShareTo(_ sender: Any)
+    {
+        Share(shareString: textTo.text)
+    }
+    
     @IBAction func CopyFrom(_ sender: Any)
     {
         CopyText(str: textFrom.text)
+    }
+    
+    @IBAction func CopyTo(_ sender: Any)
+    {
+        CopyText(str: textTo.text)
     }
     
     @IBAction func SynthesisFrom(_ sender: Any)
@@ -114,9 +124,42 @@ class ConversationViewController: ParentViewController,
         }
     }
     
+    @IBAction func SynthesisTo(_ sender: Any)
+    {
+        if textTo.text.count > 0
+        {
+            TextToSpeech(str: textTo.text, lang: langCodeTo)
+        }
+        else
+        {
+            present(ShowAlertViewController(sender: self, title: "Warning!", message: "No Text"), animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func ZoomFrom(_ sender: Any)
     {
-        performSegue(withIdentifier: "Zoom", sender: self)
+        if textFrom.text.count > 0
+        {
+            zoomString = textFrom.text
+            performSegue(withIdentifier: "Zoom", sender: self)
+        }
+        else
+        {
+            present(ShowAlertViewController(sender: self, title: L(key: "key32"), message: L(key: "key33")), animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func ZoomTo(_ sender: Any)
+    {
+        if textTo.text.count > 0
+        {
+            zoomString = textTo.text
+            performSegue(withIdentifier: "Zoom", sender: self)
+        }
+        else
+        {
+            present(ShowAlertViewController(sender: self, title: L(key: "key32"), message: L(key: "key33")), animated: true, completion: nil)
+        }
     }
     
     @IBAction func LeftStart(_ sender: Any)
@@ -125,7 +168,7 @@ class ConversationViewController: ParentViewController,
         flag = "left"
         loading?.removeFromSuperview()
         ShowLoading(loadLabel: L(key: "key37"))
-        leftMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        leftMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         leftMic.setTitleColor(GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY), for: .normal)
         NSLog("%@", langCodeFrom)
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeFrom))
@@ -142,7 +185,7 @@ class ConversationViewController: ParentViewController,
         flag = "right"
         loading?.removeFromSuperview()
         ShowLoading(loadLabel: L(key: "key37"))
-        rightMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        rightMic.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         rightMic.setTitleColor(GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY), for: .normal)
         speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: langCodeTo))
         startRecording()
@@ -166,7 +209,7 @@ class ConversationViewController: ParentViewController,
         buttonFrom.setTitle(L(key: defaults.object(forKey: "LanguageFrom") as! String), for: .normal)
         
         leftMic.layer.cornerRadius = 10
-        leftMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor
+        leftMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY).cgColor
         leftMic.layer.borderWidth = 1
         leftMic.setTitle(L(key: defaults.object(forKey: "LanguageFrom") as! String), for: .normal)
         
@@ -178,7 +221,7 @@ class ConversationViewController: ParentViewController,
         buttonTo.setTitle(L(key: defaults.object(forKey: "LanguageTo") as! String), for: .normal)
         
         rightMic.layer.cornerRadius = 10
-        rightMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor
+        rightMic.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY).cgColor
         rightMic.layer.borderWidth = 1
         rightMic.setTitle(L(key: defaults.object(forKey: "LanguageTo") as! String), for: .normal)
         
@@ -232,7 +275,7 @@ class ConversationViewController: ParentViewController,
             if(self.flag == "left")
             {
                 self.leftMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY), for: .normal)
                 if self.ConvertString.count > 0
                 {
                     self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.ConvertString, self.langCodeFrom, self.langCodeTo, self.getDeviceID()))
@@ -241,7 +284,7 @@ class ConversationViewController: ParentViewController,
             else if(self.flag == "right")
             {
                 self.rightMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY), for: .normal)
                 if self.ConvertString.count > 0
                 {
                     self.RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.ConvertString, self.langCodeTo, self.langCodeFrom, self.getDeviceID()))
@@ -308,9 +351,7 @@ class ConversationViewController: ParentViewController,
             try audioEngine.start()
         } catch {
             print("audioEngine couldn't start because of an error.")
-        }
-//        textView.text = "Say something, I'm listening!"
-        
+        }        
     }
     
     func speechRecognizer(_ speechRecognizer: SFSpeechRecognizer, availabilityDidChange available:Bool)
@@ -327,7 +368,7 @@ class ConversationViewController: ParentViewController,
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "Zoom") {
             let vc = segue.destination as! ZoomViewController
-            vc.textZoom = textFrom.text
+            vc.textZoom = zoomString
         }
     }
 
@@ -348,7 +389,7 @@ class ConversationViewController: ParentViewController,
                                 self.textFrom.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text_source") as? String)!
                                 self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
                                 self.leftMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                                self.leftMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY), for: .normal)
                                 self.TextToSpeech(str: self.textTo.text, lang: self.langCodeTo)
                             }
                             else if(self.flag == "right")
@@ -356,7 +397,7 @@ class ConversationViewController: ParentViewController,
                                 self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text_source") as? String)!
                                 self.textFrom.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
                                 self.rightMic.backgroundColor = self.GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY), for: .normal)
+                                self.rightMic.setTitleColor(self.GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY), for: .normal)
                                 self.TextToSpeech(str: self.textFrom.text, lang: self.langCodeFrom)
                             }
                         }

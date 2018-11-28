@@ -9,6 +9,8 @@
 import UIKit
 import Vision
 import StoreKit
+import CoreImage
+import CoreData
 
 class HomeViewController: ParentViewController,
                         UITableViewDelegate,
@@ -19,22 +21,22 @@ class HomeViewController: ParentViewController,
                         SKPaymentTransactionObserver
 {
     //MARK: Property
+    @IBOutlet weak var buttonClosePurchase: UIButton!
+    @IBOutlet weak var viewTrans: UIView!
     @IBOutlet weak var buttonFrom: UIButton!
     @IBOutlet weak var buttonTo: UIButton!
-    @IBOutlet weak var viewFrom: UIView!
     @IBOutlet weak var labelFrom: UILabel!
     @IBOutlet weak var textFrom: UITextView!
-    @IBOutlet weak var viewTo: UIView!
     @IBOutlet weak var labelTo: UILabel!
     @IBOutlet weak var textTo: UITextView!
     @IBOutlet weak var buttonFavorite: UIButton!
     @IBOutlet weak var imageAds: UIImageView!
-    @IBOutlet weak var buttonScroll: UIButton!
-    @IBOutlet weak var viewTable: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var viewContainer: UIView!
     
     @IBOutlet weak var imageHeight: NSLayoutConstraint!
     @IBOutlet weak var viewTableHeight: NSLayoutConstraint!
+    @IBOutlet weak var containerPurchase: NSLayoutConstraint!
     
     private var textObservations = [VNTextObservation]()
     private var tesseract = G8Tesseract(language: "eng", engineMode: .tesseractOnly)
@@ -46,6 +48,7 @@ class HomeViewController: ParentViewController,
     var adsUrl, langFrom, langTo, langCodeFrom, langCodeTo :String!
     var alertControllerFrom, alertControllerTo :UIAlertController!
     var flagLang, currLang :String!
+    var product_id: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +58,19 @@ class HomeViewController: ParentViewController,
         
         RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
         NSLog("%@", getDeviceID())
+        
+        //InsertData
+//        InsertCoreData(tableName: TABLE_LANGUAGE, dict: ["id":"4", "languageCode": "zh-TW", "languageName":"key4"])
+        
+        //UpdateData
+//        UpdateCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "id = %@", "2"), dict: ["languageCode":"id", "languageName":"key2"])
+        
+        //DeleteData
+//        DeleteCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "id = %@", "4"))
+        
+        //FetchData
+//        let dic:NSArray = SelectCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "Z_PK = %@ AND id = %@", "2", "3"))
+//        NSLog("%@", dic)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,21 +78,18 @@ class HomeViewController: ParentViewController,
         {
             langFrom = L(key: (self.defaults.object(forKey: "LanguageFrom") as! String))
             langCodeFrom = L(key: (self.defaults.object(forKey: "LanguageCodeFrom") as! String))
-            buttonFrom.setTitle(langFrom, for: .normal)
             labelFrom.text = langFrom
             langTo = L(key: (self.defaults.object(forKey: "LanguageTo") as! String))
             langCodeTo = L(key: (self.defaults.object(forKey: "LanguageCodeTo") as! String))
-            buttonTo.setTitle(langTo, for: .normal)
             labelTo.text = langTo
-        } else
+        }
+        else
         {
             langFrom = L(key: "key1")
             langCodeFrom = "en"
-            buttonFrom.setTitle(langFrom, for: .normal)
             labelFrom.text = langFrom
             langTo = L(key: "key2")
             langCodeTo = "id"
-            buttonTo.setTitle(langTo, for: .normal)
             labelTo.text = langTo
             self.defaults.set(self.langFrom, forKey: "LanguageFrom")
             self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
@@ -94,28 +107,34 @@ class HomeViewController: ParentViewController,
     
     
     //MARK: IBAction
+    @IBAction func ClosePurchase(_ sender: Any)
+    {
+        HandleSwipeButton()
+    }
+    
+    @IBAction func ClearTextFrom(_ sender: Any)
+    {
+        textFrom.text = ""
+    }
+    
     @IBAction func SelectFrom(_ sender: Any)
     {
         flagLang = "From"
-        currLang = buttonFrom.titleLabel?.text
+        currLang = labelFrom.text
         performSegue(withIdentifier: "Language", sender: self)
-//        present(alertControllerFrom, animated: true, completion: nil)
     }
     
     @IBAction func SelectTo(_ sender: Any)
     {
         flagLang = "To"
-        currLang = buttonTo.titleLabel?.text
+        currLang = labelTo.text
         performSegue(withIdentifier: "Language", sender: self)
-//        present(alertControllerTo, animated: true, completion: nil)
     }
     
     @IBAction func Swap(_ sender: Any)
     {
-        langFrom = buttonTo.titleLabel?.text
-        langTo = buttonFrom.titleLabel?.text
-        buttonFrom.setTitle(langFrom, for: .normal)
-        buttonTo.setTitle(langTo, for: .normal)
+        langFrom = labelTo.text
+        langTo = labelFrom.text
         labelFrom.text = langFrom
         labelTo.text = langTo
         let temp = langCodeFrom
@@ -152,6 +171,11 @@ class HomeViewController: ParentViewController,
         }
     }
     
+    @IBAction func ShareTo(_ sender: Any)
+    {
+        Share(shareString: textTo.text)
+    }
+    
     @IBAction func Zoom(_ sender: Any)
     {
         if textTo.text.count > 0
@@ -164,37 +188,39 @@ class HomeViewController: ParentViewController,
         }
     }
     
+    @IBAction func PasteFrom(_ sender: Any)
+    {
+        textFrom.text = PasteText()
+    }
+    
     @IBAction func CopyTo(_ sender: Any)
     {
         CopyText(str: textTo.text)
     }
     
-    @IBAction func TableScrolling(_ sender: Any)
-    {
-        HandleSwipeButton()
-    }
-    
     @IBAction func GoToConversation(_ sender: Any)
     {
-//        if KeyChainStore.load("ExpiredDate") != nil {
+        if KeyChainStore.load("ExpiredDate") != nil
+        {
             performSegue(withIdentifier: "Conversation", sender: self)
-//        }
-//        else
-//        {
-//            performSegue(withIdentifier: "Purchase", sender: self)
-//        }
+        }
+        else
+        {
+            HandleSwipeButton()
+        }
     }
     
     @IBAction func GoToOCR(_ sender: Any)
     {
         if KeyChainStore.load("ExpiredDate") != nil {
-            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+            if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera)
+            {
                 selectImageFrom("camera")
             }
         }
         else
         {
-            performSegue(withIdentifier: "Purchase", sender: self)
+            HandleSwipeButton()
         }
     }
     
@@ -207,62 +233,56 @@ class HomeViewController: ParentViewController,
     @IBAction func GoToPurchase(_ sender: Any)
     {
         BackgroundTap()
-        performSegue(withIdentifier: "Purchase", sender: self)
+        HandleSwipeButton()
     }
     
     //MARK: Function
     func SetupUI() -> Void
     {
-        buttonFrom.layer.cornerRadius = 10
-        buttonFrom.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        buttonFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        buttonFrom.layer.borderWidth = 1
-        buttonTo.layer.cornerRadius = 10
-        
-        viewFrom.layer.cornerRadius = 10
-        viewFrom.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        viewFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
-        viewFrom.layer.borderWidth = 1
         textFrom.returnKeyType = .go
-        
-        viewTo.layer.cornerRadius = 10
+        textFrom.delegate = self
         
         textTo.isEditable = false
         
-        viewTable.layer.cornerRadius = 10
-        
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor.clear
-        tableView.allowsSelection = false
-        tableView.separatorStyle = .none
+//        tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
         
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
-        swipeUp.direction = .up
-        self.view.addGestureRecognizer(swipeUp)
+//        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
+//        swipeUp.direction = .up
+//        self.view.addGestureRecognizer(swipeUp)
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
         swipeDown.direction = .down
-        self.view.addGestureRecognizer(swipeDown)
+        viewContainer.addGestureRecognizer(swipeDown)
 
         imageHeight.constant = 0
+        containerPurchase.constant = 0
+        buttonClosePurchase.isHidden = false
     }
     
     @objc func HandleSwipeButton()
     {
-        if viewTableHeight.constant == 5
+        if containerPurchase.constant == 0
         {
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton))
+            swipeDown.direction = .down
+            viewContainer.addGestureRecognizer(swipeDown)
+            
             UIView.animate(withDuration: 0.5, animations:{() -> Void in
-                self.viewTableHeight.constant = self.imageHeight.constant == 0 ? -(self.view.frame.size.height/1.83) : -(self.view.frame.size.height/1.57)
+                self.containerPurchase.constant = self.view.frame.size.height-70
                 self.view.layoutIfNeeded()})
-            buttonScroll.setImage(UIImage(named: "down arrow"), for: .normal)
+            buttonClosePurchase.isHidden = true
         }
         else
         {
+            viewContainer.removeGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(HandleSwipeButton)))
+            
             UIView.animate(withDuration: 0.5, animations:{() -> Void in
-                self.viewTableHeight.constant = 5
+                self.containerPurchase.constant = 0
                 self.view.layoutIfNeeded()})
-            buttonScroll.setImage(UIImage(named: "up arrow"), for: .normal)
+            buttonClosePurchase.isHidden = false
         }
     }
     
@@ -270,12 +290,13 @@ class HomeViewController: ParentViewController,
     {
         let tempDic = history.object(at: id.tag) as! NSDictionary
         if ((tempDic.object(forKey: "favorite") as? String) == "Y") {
-            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
+            let dic: NSDictionary = ["langFrom":self.langFrom, "langCodeFrom":self.langCodeFrom,  "langTo":self.langTo, "langCodeTo":self.langCodeTo, "textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
             history[id.tag] = dic
             defaults.set(history, forKey: "History")
-        } else
+        }
+        else
         {
-            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "Y", "index":(tempDic.object(forKey: "index") as? Int)!]
+            let dic: NSDictionary = ["langFrom":self.langFrom, "langTo":self.langTo, "textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "Y", "index":(tempDic.object(forKey: "index") as? Int)!]
             history[id.tag] = dic
             defaults.set(history, forKey: "History")
         }
@@ -381,19 +402,31 @@ class HomeViewController: ParentViewController,
         handleWithTesseract(image: imageTake)
     }
     
-    func handleWithTesseract(image: UIImage) {
-//        let stillImageFilter:GPUImageAdaptiveThresholdFilter
-//        stillImageFilter.blurRadiusInPixels = 4.0 // adjust this to tweak the blur radius of the filter, defaults to 4.0
-//
-//        // Retrieve the filtered image from the filter
-//        let filteredImage:UIImage = stillImageFilter.
-//        [stillImageFilter imageByFilteringImage:image];
-//
-//        // Give Tesseract the filtered image
-//        tesseract.image = filteredImage;
+    func handleWithTesseract(image: UIImage)
+    {
+        guard let _ = image.images, let cgimg = image.cgImage else
+        {
+            print("imageView doesn't have an image!")
+            return
+        }
         
+        let coreImage = CIImage(cgImage: cgimg)
         
-        self.tesseract?.image = image.g8_blackAndWhite()
+        let filter = CIFilter(name: "CISepiaTone")
+        filter?.setValue(coreImage, forKey: kCIInputImageKey)
+        filter?.setValue(0.5, forKey: kCIInputIntensityKey)
+        
+        if let output = filter?.value(forKey: kCIOutputImageKey) as? CIImage
+        {
+            let filteredImage = UIImage(ciImage: output)
+            self.tesseract?.image = filteredImage.g8_blackAndWhite()
+        }
+        else
+        {
+            print("image filtering failed")
+        }
+        
+//        self.tesseract?.image = image.g8_blackAndWhite()
         self.tesseract?.setVariableValue("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-", forKey: "tessedit_char_whitelist")
         self.tesseract?.recognize()
         
@@ -419,45 +452,44 @@ class HomeViewController: ParentViewController,
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
         cell.labelFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textFrom") as? String
-        cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         cell.labelTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textTo") as? String
-        cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         if((history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "favorite") as? String == "Y")
         {
-            cell.imageFavorite?.image = UIImage(named: "favorite icon_red")
+            cell.imageFavorite?.image = UIImage(named: "star_1")
         }
         else
         {
-            cell.imageFavorite?.image = UIImage(named: "favorite icon_red outline")
+            cell.imageFavorite?.image = UIImage(named: "star_2")
         }
         cell.buttonImageFavorite.tag = indexPath.row
         cell.buttonImageFavorite.addTarget(self, action: #selector(TableFavoriteTap(id:)), for: .touchUpInside)
-        
-        cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor
-        cell.layer.cornerRadius = 10
-        cell.clipsToBounds = true
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
+        labelFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langFrom") as? String
+        textFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textFrom") as? String
+        langCodeFrom = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeFrom") as? String
+        labelTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langTo") as? String
+        textTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textTo") as? String
+        langCodeTo = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeTo") as? String
         tableView.deselectRow(at: indexPath, animated: false)
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
         return 65
     }
     
     //MARK: TextView Delegate
-    
     public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
         if (text == "\n")
         {
-//            NSLog("%@", (history.object(at: 1) as! NSDictionary).object(forKey: "textFrom") as! String)
             if textFrom.text.count > 0
             {
                 RequestAPITranslate(urlRequest: URL_REQUESTAPI_TRANSLATE, params: String(format: "text=%@&from=%@&to=%@&uuid=%@", self.textFrom.text!, langCodeFrom, langCodeTo, self.getDeviceID()))
@@ -510,10 +542,10 @@ class HomeViewController: ParentViewController,
             {
                 if((self.response?.object(forKey: "error") as? Int) == 0)
                 {
+                    self.textTo.text = (self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String
                     if(!self.textTo.text.contains("#") && !(self.textFrom.text == self.textTo.text))
                     {
-                        self.textTo.text = ((self.response?.object(forKey: "result") as! NSDictionary).object(forKey: "text") as? String)!
-                        let dic: NSDictionary = ["textFrom":self.textFrom.text, "textTo":self.textTo.text, "favorite": self.buttonFavorite.tag == 0 ? "N" :"Y", "index":self.history.count > 0 ? self.history.count : 0]
+                        let dic: NSDictionary = ["langFrom":self.langFrom, "langCodeFrom":self.langCodeFrom, "langTo":self.langTo, "langCodeTo":self.langCodeTo, "textFrom":self.textFrom.text, "textTo":self.textTo.text, "favorite": "N", "index":self.history.count > 0 ? self.history.count : 0]
 //                        self.history.addObjects(from: [dic as Any])
                         self.history.insert(dic, at: 0)
                         self.defaults.set(self.history, forKey: "History")
@@ -560,8 +592,6 @@ class HomeViewController: ParentViewController,
                     }
                 }
                 self.loading?.removeFromSuperview()
-                
-                self.performSegue(withIdentifier: "Purchase", sender: self)
             }
         }
     }

@@ -16,7 +16,7 @@ import Foundation
 public let THEME_GENERAL_PRIMARY: UInt32 =  0xffffff            // white
 public let THEME_GENERAL_SECONDARY: UInt32 = 0x000000           // black
 public let THEME_GENERAL_TERTIARY: UInt32 =  0xe94970           // light red
-public let THEME_GENERAL_QUATERNARY: UInt32 = 0x004a82          // dark blue
+public let THEME_GENERAL_QUATERNARY: UInt32 = 0x30cfda          // dark blue
 public let THEME_GENERAL_QUINARY: UInt32 = 0xfafafa             // light gray
 public let THEME_GENERAL_SENARY: UInt32 = 0xf16f21              // light orange
 public let THEME_GENERAL_SEPTENARY: UInt32 = 0xdd510d           // dark orange

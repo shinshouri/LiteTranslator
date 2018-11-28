@@ -1,0 +1,48 @@
+
+/* Class = "UITextView"; text = "Automatic renewal service description\n\nPayment: The user confirms the payment and accounts for the iTunes account;\n\nCancel renewal: To cancel the renewal, please manually disable the automatic renewal function in iTunes/Apple ID settings management 24 hours before the current subscription period expires. If you cancel within 24 hours before expiration, the subscription fee will be charged.\n\nRenewal fee: Apple's iTunes account will be charged within 24 hours before expiration. After the deduction is successful, the subscription period is postponed for one subscription period."; ObjectID = "Cb9-m6-7AV"; */
+"Cb9-m6-7AV.text" = "Automatic renewal service description\n\nPayment: The user confirms the payment and accounts for the iTunes account;\n\nCancel renewal: To cancel the renewal, please manually disable the automatic renewal function in iTunes/Apple ID settings management 24 hours before the current subscription period expires. If you cancel within 24 hours before expiration, the subscription fee will be charged.\n\nRenewal fee: Apple's iTunes account will be charged within 24 hours before expiration. After the deduction is successful, the subscription period is postponed for one subscription period.";
+
+/* Class = "UILabel"; text = "Phrasebook"; ObjectID = "GtA-s8-C9q"; */
+"GtA-s8-C9q.text" = "Phrasebook";
+
+/* Class = "UILabel"; text = "Real-time photo translation"; ObjectID = "I23-wl-IBn"; */
+"I23-wl-IBn.text" = "Real-time photo translation";
+
+/* Class = "UILabel"; text = "Conversation"; ObjectID = "JN4-Oa-n6M"; */
+"JN4-Oa-n6M.text" = "Conversation";
+
+/* Class = "UILabel"; text = "Text"; ObjectID = "Re3-ea-tp1"; */
+"Re3-ea-tp1.text" = "Text";
+
+/* Class = "UILabel"; text = "Camera"; ObjectID = "SIF-fz-xgc"; */
+"SIF-fz-xgc.text" = "Camera";
+
+/* Class = "UILabel"; text = "1 year VIP for only ¥298!"; ObjectID = "Xug-0S-jmg"; */
+"Xug-0S-jmg.text" = "1 year VIP for only ¥298!";
+
+/* Class = "UILabel"; text = "Live voice translation"; ObjectID = "ara-n4-pJH"; */
+"ara-n4-pJH.text" = "Live voice translation";
+
+/* Class = "UILabel"; text = "VIP privilege:"; ObjectID = "g1c-Xb-HOp"; */
+"g1c-Xb-HOp.text" = "VIP privilege:";
+
+/* Class = "UILabel"; text = "Language"; ObjectID = "nOk-3j-Ir6"; */
+"nOk-3j-Ir6.text" = "Language";
+
+/* Class = "UIButton"; normalTitle = "BUY NOW!"; ObjectID = "nZh-KY-qi2"; */
+"nZh-KY-qi2.normalTitle" = "BUY NOW!";
+
+/* Class = "UILabel"; text = "Real-time translate"; ObjectID = "r7R-Q0-j8K"; */
+"r7R-Q0-j8K.text" = "Real-time translate";
+
+/* Class = "UILabel"; text = "Faster and more accurate without ads"; ObjectID = "tta-ub-uUl"; */
+"tta-ub-uUl.text" = "Faster and more accurate without ads";
+
+/* Class = "UIButton"; normalTitle = "Agreement"; ObjectID = "vlg-lp-Ok5"; */
+"vlg-lp-Ok5.normalTitle" = "Agreement";
+
+/* Class = "UILabel"; text = "Favorite"; ObjectID = "wTB-Iw-ONJ"; */
+"wTB-Iw-ONJ.text" = "Favorite";
+
+/* Class = "UILabel"; text = "Store"; ObjectID = "zx8-OV-NGc"; */
+"zx8-OV-NGc.text" = "Store";

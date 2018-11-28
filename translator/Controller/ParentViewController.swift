@@ -8,10 +8,13 @@
 import UIKit
 import AVFoundation
 import StoreKit
+import CoreData
 
 open class ParentViewController: UIViewController,
                                 UITextViewDelegate
 {
+    var appDelegate: AppDelegate!
+    var context: NSManagedObjectContext!
     var response: NSDictionary?
     var loading: UIView?
     var defaults: UserDefaults! = UserDefaults.standard
@@ -25,6 +28,7 @@ open class ParentViewController: UIViewController,
 
         // Do any additional setup after loading the view.
 //        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "BGiPhone1")!)
+        
         bgView = UIView(frame: self.view.frame)
         bgImage = UIImageView(frame: bgView.frame)
         bgImage.image = UIImage(named: "BG iPhone 1")
@@ -54,8 +58,6 @@ open class ParentViewController: UIViewController,
                         "ro", "ru", "sk", "es",
                         "sv", "th", "tr", "uk",
                         "vi"];
-            
-
 //            "de-AT", "yue-CN", "hi-IN-translit",
 //            "hu-HU", "zh-HK", "nb-NO", "hr-HR", "he-IL",
 //            "wuu-CN", "de-CH", "de-DE", "hi-Latn",
@@ -64,6 +66,9 @@ open class ParentViewController: UIViewController,
             defaults.set(langCode, forKey: "LanguageCode")
             defaults.synchronize()
         }
+        
+        appDelegate = (UIApplication.shared.delegate as! AppDelegate)
+        context = appDelegate.persistentContainer.viewContext
     }
 
     override open func didReceiveMemoryWarning()
@@ -76,10 +81,12 @@ open class ParentViewController: UIViewController,
     //MARK: UI
     public func ChangeBG(sender:UIViewController, image:String)
     {
-        if (image == "") {
+        if (image == "")
+        {
             bgImage.image = UIImage(named: image)
             bgImage.backgroundColor = UIColor.white
-        } else
+        }
+        else
         {
             bgImage.image = UIImage(named: image)
         }
@@ -126,7 +133,8 @@ open class ParentViewController: UIViewController,
         self.view.addSubview(loading!)
     }
     
-    public func TextToSpeech(str: String, lang: String) {
+    public func TextToSpeech(str: String, lang: String)
+    {
         let utterance = AVSpeechUtterance(string: str)
         utterance.voice = AVSpeechSynthesisVoice(language: lang)
 //        utterance.rate = 0.25
@@ -138,11 +146,25 @@ open class ParentViewController: UIViewController,
         synthesizer.speak(utterance)
     }
     
+    public func Share(shareString:String)
+    {
+        let textToShare = [ shareString ]
+        let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view // so that iPads won't crash
+        
+        // exclude some activity types from the list (optional)
+//        activityViewController.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook ]
+        
+        // present the view controller
+        self.present(activityViewController, animated: true, completion: nil)
+    }
+    
     public func CopyText(str: String)
     {
         let pasteboard = UIPasteboard.general
         pasteboard.string = str
     }
+    
     
     //MARK: FUNCTION
     public func getDeviceID() -> String
@@ -158,6 +180,12 @@ open class ParentViewController: UIViewController,
     public func L(key:String) -> String
     {
         return NSLocalizedString(key, comment: "")
+    }
+    
+    public func PasteText() -> String
+    {
+        let pasteboard = UIPasteboard.general
+        return pasteboard.string ?? ""
     }
     
     public func GeneratorUIColor(intHexColor : UInt32, Opacity : Double = 1.0) -> UIColor
@@ -237,6 +265,97 @@ open class ParentViewController: UIViewController,
     
     public func Base64Decoded(data:String) -> NSData {
         return NSData(base64Encoded: data, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters)!
+    }
+    
+    
+    //MARK: COREDATA
+    func InsertCoreData(tableName:String, dict:NSDictionary) -> Void
+    {
+        let entity = NSEntityDescription.entity(forEntityName: tableName, in: context)
+        let newLanguage = NSManagedObject(entity: entity!, insertInto: context)
+        
+        for (key, value) in dict
+        {
+            newLanguage.setValue(value, forKey: key as! String)
+        }
+        
+        appDelegate.saveContext()
+    }
+    
+    func UpdateCoreData(tableName:String, query:NSPredicate, dict:NSDictionary) -> Void
+    {
+        let requestUpdate = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
+        requestUpdate.predicate = query
+        requestUpdate.returnsObjectsAsFaults = false
+        do
+        {
+            let result = try context.fetch(requestUpdate)
+            if result.count > 0
+            {
+                let objectToUpdate = result[0] as! NSManagedObject
+
+                for (key, value) in dict
+                {
+                    objectToUpdate.setValue(value, forKey: key as! String)
+                }
+                try context.save()
+            }
+        }
+        catch
+        {
+            print("Failed")
+        }
+    }
+    
+    func DeleteCoreData(tableName:String, query:NSPredicate) -> Void
+    {
+        let requestDelete = NSFetchRequest<NSFetchRequestResult>(entityName: tableName)
+        requestDelete.predicate = query
+        requestDelete.returnsObjectsAsFaults = false
+        do
+        {
+            let result = try context.fetch(requestDelete)
+            if result.count > 0
+            {
+                let objectToDelete = result[0] as! NSManagedObject
+                context.delete(objectToDelete)
+                try context.save()
+            }
+            
+        }
+        catch
+        {
+            print("Failed")
+        }
+    }
+    
+    func SelectCoreData(tableName:String, query:NSPredicate) -> NSArray
+    {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "LanguageTable")
+//        request.predicate = NSPredicate(format: "id = %@", "3")
+        request.returnsObjectsAsFaults = false
+        do
+        {
+            let result = try context.fetch(request)
+            if result.count > 0
+            {
+                let arr: NSMutableArray! = []
+                for data in result as! [NSManagedObject]
+                {
+                    let dic:NSDictionary = ["id":data.value(forKey: "id") as! String, "languageCode":data.value(forKey: "languageCode") as! String,"languageName":data.value(forKey: "languageName") as! String]
+                    arr.addObjects(from: [dic as Any])
+//                    print(data.value(forKey: "id") as! String)
+//                    print(data.value(forKey: "languageCode") as! String)
+//                    print(L(key: data.value(forKey: "languageName") as! String))
+                }
+                return arr.mutableCopy() as! NSArray
+            }
+        }
+        catch
+        {
+            print("Failed")
+        }
+        return NSArray()
     }
     
     
@@ -371,7 +490,7 @@ open class ParentViewController: UIViewController,
                     // parse the result as JSON, since that's what the API provides
                     do
                     {
-                        let jsonString = JoDess.decode(String(data: data!, encoding: .utf8), key: STRING_KEY)
+                        let jsonString = JoDess.decode(String(data: responseData, encoding: .utf8), key: STRING_KEY)
                         let dataString = Data((jsonString?.utf8)!)
                         guard let todo = try JSONSerialization.jsonObject(with: dataString, options: [])
                             as? NSDictionary else

@@ -118,12 +118,12 @@ class LanguageViewController: ParentViewController,
             if currentLang == L(key: filtered[indexPath.row])
             {
                 cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
                 cell.imageFavorite?.image = UIImage(named: "checklist icon")
             }
             else
             {
-                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
                 cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
                 cell.imageFavorite?.image = nil
             }
@@ -134,19 +134,19 @@ class LanguageViewController: ParentViewController,
             if currentLang == L(key: (lang.object(at: indexPath.row) as! String))
             {
                 cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
                 cell.imageFavorite?.image = UIImage(named: "checklist icon")
             }
             else
             {
-                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+                cell.labelLanguage?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
                 cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
                 cell.imageFavorite?.image = nil
             }
         }
         
         cell.layer.borderWidth = 1
-        cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor;
+        cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY).cgColor;
         cell.layer.cornerRadius = 10
         cell.clipsToBounds = true
         

@@ -24,7 +24,7 @@ class FavoriteViewController: ParentViewController,
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor.clear
         tableView.allowsSelection = false
-        tableView.separatorStyle = .none
+//        tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 90
         tableView.delegate = self
@@ -88,19 +88,13 @@ class FavoriteViewController: ParentViewController,
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
         cell.labelFrom?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textFrom") as? String
-        cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
+        cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         cell.labelTo?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textTo") as? String
-        cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY)
-        cell.imageFavorite?.image = UIImage(named: "favorite icon_red")
+        cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
+        cell.imageFavorite?.image = UIImage(named: "star_1")
         
         cell.buttonImageFavorite.tag = indexPath.row
         cell.buttonImageFavorite.addTarget(self, action: #selector(TableFavoriteTap(id:)), for: .touchUpInside)
-        
-        cell.backgroundColor = GeneratorUIColor(intHexColor: THEME_GENERAL_PRIMARY)
-        cell.layer.borderWidth = 1
-        cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_TERTIARY).cgColor;
-        cell.layer.cornerRadius = 10
-        cell.clipsToBounds = true
         
         return cell
     }
