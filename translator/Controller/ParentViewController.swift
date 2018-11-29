@@ -321,7 +321,6 @@ open class ParentViewController: UIViewController,
                 context.delete(objectToDelete)
                 try context.save()
             }
-            
         }
         catch
         {

@@ -25,6 +25,7 @@ class FavoriteViewController: ParentViewController,
         tableView.backgroundColor = UIColor.clear
         tableView.allowsSelection = false
 //        tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView(frame: .zero)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 90
         tableView.delegate = self
@@ -57,7 +58,7 @@ class FavoriteViewController: ParentViewController,
             let index = (self.favorite.object(at: id.tag) as! NSDictionary).object(forKey: "index") as! Int
             let tempDic = self.history.object(at: index) as! NSDictionary
             
-            let dic: NSDictionary = ["textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
+            let dic: NSDictionary = ["langFrom":(tempDic.object(forKey: "langFrom") as? String)!, "langCodeFrom":(tempDic.object(forKey: "langCodeFrom") as? String)!,  "langTo":(tempDic.object(forKey: "langTo") as? String)!, "langCodeTo":(tempDic.object(forKey: "langCodeTo") as? String)!, "textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "N", "index":(tempDic.object(forKey: "index") as? Int)!]
             self.history[index] = dic
             self.defaults.set((self.history.mutableCopy() as! NSMutableArray), forKey: "History")
             self.defaults.synchronize()
@@ -87,8 +88,13 @@ class FavoriteViewController: ParentViewController,
     {
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
+        cell.imageLangFrom.layer.cornerRadius = 10
+        cell.imageLangFrom.image = UIImage(named: (favorite.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeFrom") as! String)
         cell.labelFrom?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textFrom") as? String
         cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
+        
+        cell.imageLangTo.layer.cornerRadius = 10
+        cell.imageLangTo.image = UIImage(named: (favorite.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeTo") as! String)
         cell.labelTo?.text = (favorite.object(at: indexPath.row) as! NSDictionary).object(forKey: "textTo") as? String
         cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         cell.imageFavorite?.image = UIImage(named: "star_1")

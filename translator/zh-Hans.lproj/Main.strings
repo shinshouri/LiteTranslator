@@ -81,3 +81,7 @@
 
 /* Class = "UILabel"; text = "Store"; ObjectID = "zx8-OV-NGc"; */
 "zx8-OV-NGc.text" = "购买";
+
+/* Class = "UILabel"; text = "Real-time photo translation"; ObjectID = "zx8-OV-NGc"; */
+"I23-wl-IBn.text" = "实时拍照翻译";
+

@@ -23,10 +23,10 @@ class HomeViewController: ParentViewController,
     //MARK: Property
     @IBOutlet weak var buttonClosePurchase: UIButton!
     @IBOutlet weak var viewTrans: UIView!
-    @IBOutlet weak var buttonFrom: UIButton!
-    @IBOutlet weak var buttonTo: UIButton!
+    @IBOutlet weak var imageFlagFrom: UIImageView!
     @IBOutlet weak var labelFrom: UILabel!
     @IBOutlet weak var textFrom: UITextView!
+    @IBOutlet weak var imageFlagTo: UIImageView!
     @IBOutlet weak var labelTo: UILabel!
     @IBOutlet weak var textTo: UITextView!
     @IBOutlet weak var buttonFavorite: UIButton!
@@ -35,7 +35,6 @@ class HomeViewController: ParentViewController,
     @IBOutlet weak var viewContainer: UIView!
     
     @IBOutlet weak var imageHeight: NSLayoutConstraint!
-    @IBOutlet weak var viewTableHeight: NSLayoutConstraint!
     @IBOutlet weak var containerPurchase: NSLayoutConstraint!
     
     private var textObservations = [VNTextObservation]()
@@ -56,21 +55,8 @@ class HomeViewController: ParentViewController,
         SKPaymentQueue.default().restoreCompletedTransactions()
         SetupUI()
         
-        RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
+//        RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
         NSLog("%@", getDeviceID())
-        
-        //InsertData
-//        InsertCoreData(tableName: TABLE_LANGUAGE, dict: ["id":"4", "languageCode": "zh-TW", "languageName":"key4"])
-        
-        //UpdateData
-//        UpdateCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "id = %@", "2"), dict: ["languageCode":"id", "languageName":"key2"])
-        
-        //DeleteData
-//        DeleteCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "id = %@", "4"))
-        
-        //FetchData
-//        let dic:NSArray = SelectCoreData(tableName: TABLE_LANGUAGE, query: NSPredicate(format: "Z_PK = %@ AND id = %@", "2", "3"))
-//        NSLog("%@", dic)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,17 +65,21 @@ class HomeViewController: ParentViewController,
             langFrom = L(key: (self.defaults.object(forKey: "LanguageFrom") as! String))
             langCodeFrom = L(key: (self.defaults.object(forKey: "LanguageCodeFrom") as! String))
             labelFrom.text = langFrom
+            imageFlagFrom.image = UIImage(named: langCodeFrom)
             langTo = L(key: (self.defaults.object(forKey: "LanguageTo") as! String))
             langCodeTo = L(key: (self.defaults.object(forKey: "LanguageCodeTo") as! String))
             labelTo.text = langTo
+            imageFlagTo.image = UIImage(named: langCodeTo)
         }
         else
         {
             langFrom = L(key: "key1")
             langCodeFrom = "en"
+            imageFlagFrom.image = UIImage(named: langCodeFrom)
             labelFrom.text = langFrom
             langTo = L(key: "key2")
             langCodeTo = "id"
+            imageFlagTo.image = UIImage(named: langCodeTo)
             labelTo.text = langTo
             self.defaults.set(self.langFrom, forKey: "LanguageFrom")
             self.defaults.set(self.langCodeFrom, forKey: "LanguageCodeFrom")
@@ -200,14 +190,14 @@ class HomeViewController: ParentViewController,
     
     @IBAction func GoToConversation(_ sender: Any)
     {
-        if KeyChainStore.load("ExpiredDate") != nil
-        {
+//        if KeyChainStore.load("ExpiredDate") != nil
+//        {
             performSegue(withIdentifier: "Conversation", sender: self)
-        }
-        else
-        {
-            HandleSwipeButton()
-        }
+//        }
+//        else
+//        {
+//            HandleSwipeButton()
+//        }
     }
     
     @IBAction func GoToOCR(_ sender: Any)
@@ -239,6 +229,9 @@ class HomeViewController: ParentViewController,
     //MARK: Function
     func SetupUI() -> Void
     {
+        imageFlagFrom.layer.cornerRadius = 10
+        imageFlagTo.layer.cornerRadius = 10
+        
         textFrom.returnKeyType = .go
         textFrom.delegate = self
         
@@ -247,6 +240,7 @@ class HomeViewController: ParentViewController,
         tableView.layer.cornerRadius = 10
         tableView.backgroundColor = UIColor.clear
 //        tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView(frame: .zero)
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -296,7 +290,7 @@ class HomeViewController: ParentViewController,
         }
         else
         {
-            let dic: NSDictionary = ["langFrom":self.langFrom, "langTo":self.langTo, "textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "Y", "index":(tempDic.object(forKey: "index") as? Int)!]
+            let dic: NSDictionary = ["langFrom":self.langFrom, "langCodeFrom":self.langCodeFrom, "langTo":self.langTo, "langCodeTo":self.langCodeTo, "textFrom":(tempDic.object(forKey: "textFrom") as? String)!, "textTo":(tempDic.object(forKey: "textTo") as? String)!, "favorite": "Y", "index":(tempDic.object(forKey: "index") as? Int)!]
             history[id.tag] = dic
             defaults.set(history, forKey: "History")
         }
@@ -451,8 +445,13 @@ class HomeViewController: ParentViewController,
     {
         let cell:TableViewCellFavorite = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellFavorite
         
+        cell.imageLangFrom.layer.cornerRadius = 10
+        cell.imageLangFrom.image = UIImage(named: (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeFrom") as! String)
         cell.labelFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textFrom") as? String
         cell.labelFrom?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
+        
+        cell.imageLangTo.layer.cornerRadius = 10
+        cell.imageLangTo.image = UIImage(named: (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeTo") as! String)
         cell.labelTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textTo") as? String
         cell.labelTo?.textColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY)
         if((history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "favorite") as? String == "Y")
@@ -474,9 +473,11 @@ class HomeViewController: ParentViewController,
         labelFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langFrom") as? String
         textFrom?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textFrom") as? String
         langCodeFrom = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeFrom") as? String
+        imageFlagFrom.image = UIImage(named: langCodeFrom)
         labelTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langTo") as? String
         textTo?.text = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "textTo") as? String
         langCodeTo = (history.object(at: indexPath.row) as? NSDictionary)?.object(forKey: "langCodeTo") as? String
+        imageFlagTo.image = UIImage(named: langCodeTo)
         tableView.deselectRow(at: indexPath, animated: false)
     }
     

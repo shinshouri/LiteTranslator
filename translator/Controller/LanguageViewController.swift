@@ -31,11 +31,12 @@ class LanguageViewController: ParentViewController,
         tableView.backgroundColor = UIColor.clear
         tableView.estimatedRowHeight = 50
         tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView(frame: .zero)
         tableView.delegate = self
         tableView.dataSource = self
         
         searchBar.delegate = self
-        searchBar.placeholder = "Search"
+        searchBar.placeholder = L(key: "key40")
         
         lang = ((self.defaults.object(forKey: "Language") as! NSArray).mutableCopy() as! NSMutableArray)
         langCode = ((self.defaults.object(forKey: "LanguageCode") as! NSArray).mutableCopy() as! NSMutableArray)
@@ -113,7 +114,9 @@ class LanguageViewController: ParentViewController,
     {
         let cell:TableViewCellLanguage = self.tableView.dequeueReusableCell(withIdentifier: "cell")! as! TableViewCellLanguage
         
-        if(searchActive){
+        if(searchActive)
+        {
+            cell.imageLanguage.image = UIImage(named: langCode.object(at: lang.index(of: filtered[indexPath.row])) as! String)
             cell.labelLanguage?.text = L(key: filtered[indexPath.row])
             if currentLang == L(key: filtered[indexPath.row])
             {
@@ -130,6 +133,7 @@ class LanguageViewController: ParentViewController,
         }
         else
         {
+            cell.imageLanguage.image = UIImage(named: langCode.object(at: indexPath.row) as! String)
             cell.labelLanguage?.text = L(key: lang.object(at: indexPath.row) as! String)
             if currentLang == L(key: (lang.object(at: indexPath.row) as! String))
             {
@@ -145,6 +149,7 @@ class LanguageViewController: ParentViewController,
             }
         }
         
+        cell.imageLanguage.layer.cornerRadius = 10
         cell.layer.borderWidth = 1
         cell.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_QUATERNARY).cgColor;
         cell.layer.cornerRadius = 10

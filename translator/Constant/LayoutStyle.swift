@@ -18,6 +18,8 @@ class TableViewCellFavorite: UITableViewCell
 {
     // MARK: USER INTERFACE COMPONENT
     
+    @IBOutlet weak var imageLangFrom: UIImageView!
+    @IBOutlet weak var imageLangTo: UIImageView!
     @IBOutlet weak var labelFrom: UILabel!
     @IBOutlet weak var labelTo: UILabel!
     @IBOutlet weak var imageFavorite: UIImageView!
@@ -37,6 +39,7 @@ class TableViewCellLanguage: UITableViewCell
     // MARK: USER INTERFACE COMPONENT
     
     @IBOutlet weak var imageFavorite: UIImageView!
+    @IBOutlet weak var imageLanguage: UIImageView!
     @IBOutlet weak var labelLanguage: UILabel!
     
     // MARK: REQUIRED
