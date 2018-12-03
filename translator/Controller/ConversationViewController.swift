@@ -13,9 +13,11 @@ class ConversationViewController: ParentViewController,
                                 SFSpeechRecognizerDelegate {
 
     @IBOutlet weak var viewFrom: UIView!
+    @IBOutlet weak var imageFrom: UIImageView!
     @IBOutlet weak var buttonFrom: UIButton!
     @IBOutlet weak var textFrom: UITextView!
     @IBOutlet weak var viewTo: UIView!
+    @IBOutlet weak var imageTo: UIImageView!
     @IBOutlet weak var buttonTo: UIButton!
     @IBOutlet weak var textTo: UITextView!
     @IBOutlet weak var leftMic: UIButton!
@@ -206,6 +208,8 @@ class ConversationViewController: ParentViewController,
         viewFrom.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
         viewFrom.layer.borderWidth = 1
         
+        imageFrom.layer.cornerRadius = 10
+        imageFrom.image = UIImage(named: defaults.object(forKey: "LanguageCodeFrom") as! String)
         buttonFrom.setTitle(L(key: defaults.object(forKey: "LanguageFrom") as! String), for: .normal)
         
         leftMic.layer.cornerRadius = 10
@@ -218,6 +222,8 @@ class ConversationViewController: ParentViewController,
         viewTo.layer.borderColor = GeneratorUIColor(intHexColor: THEME_GENERAL_SECONDARY).cgColor
         viewTo.layer.borderWidth = 1
         
+        imageTo.layer.cornerRadius = 10
+        imageTo.image = UIImage(named: defaults.object(forKey: "LanguageCodeTo") as! String)
         buttonTo.setTitle(L(key: defaults.object(forKey: "LanguageTo") as! String), for: .normal)
         
         rightMic.layer.cornerRadius = 10

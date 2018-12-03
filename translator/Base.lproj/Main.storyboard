@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OLV-vG-xhE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qPX-gc-Ihf">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,6 +9,169 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="i5d-Dj-a0Y">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="qPX-gc-Ihf" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DLG-bl-KYP">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Fmz-eo-K5u" kind="relationship" relationship="rootViewController" id="csF-h2-huS"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tMp-kj-VOK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2564" y="2346"/>
+        </scene>
+        <!--Preview View Controller-->
+        <scene sceneID="QVq-kP-m2L">
+            <objects>
+                <viewController id="Fmz-eo-K5u" customClass="PreviewViewController" customModule="translator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="PpE-hc-NVW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Rk-n6-lKp">
+                                <rect key="frame" x="19" y="167.5" width="337.5" height="100"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose Country" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NBc-g6-OoR">
+                                        <rect key="frame" x="10" y="10" width="317.5" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4mJ-N6-1eh">
+                                        <rect key="frame" x="10" y="36" width="317.5" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="Tyz-wp-klZ"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iF2-xm-UIT">
+                                        <rect key="frame" x="45" y="54" width="93.5" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="VJd-aR-kBV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PiN-wt-oUK">
+                                        <rect key="frame" x="153.5" y="49" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="baM-yM-nN0"/>
+                                            <constraint firstAttribute="width" constant="30" id="fRN-hC-5oR"/>
+                                        </constraints>
+                                        <state key="normal" image="switch icon"/>
+                                        <connections>
+                                            <action selector="Swap:" destination="Fmz-eo-K5u" eventType="touchUpInside" id="Hf9-cG-Smq"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="en" translatesAutoresizingMaskIntoConstraints="NO" id="dsZ-WI-R3B">
+                                        <rect key="frame" x="15" y="54" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="LW5-RL-VLj"/>
+                                            <constraint firstAttribute="height" constant="20" id="jFW-F1-kDK"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="id" translatesAutoresizingMaskIntoConstraints="NO" id="WFx-r1-Umy">
+                                        <rect key="frame" x="198.5" y="54" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="EJL-ZQ-N8W"/>
+                                            <constraint firstAttribute="width" constant="20" id="xs0-Z4-UhT"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtg-fo-cEn">
+                                        <rect key="frame" x="228.5" y="54" width="94" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="elM-O0-ViT"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" alpha="0.20000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAM-aY-JvQ">
+                                        <rect key="frame" x="10" y="49" width="133.5" height="30"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <connections>
+                                            <action selector="SelectFrom:" destination="Fmz-eo-K5u" eventType="touchUpInside" id="8RG-pS-TXO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" alpha="0.20000000000000001" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAR-qj-Lfj">
+                                        <rect key="frame" x="193.5" y="49" width="134" height="30"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <connections>
+                                            <action selector="SelectTo:" destination="Fmz-eo-K5u" eventType="touchUpInside" id="ojB-YW-Gvm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.29146817326545715" green="0.7372780442237854" blue="0.91238826513290405" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="Mtg-fo-cEn" firstAttribute="centerY" secondItem="WFx-r1-Umy" secondAttribute="centerY" id="3D9-d5-QVI"/>
+                                    <constraint firstItem="WFx-r1-Umy" firstAttribute="centerY" secondItem="PiN-wt-oUK" secondAttribute="centerY" id="4ZV-fy-OGz"/>
+                                    <constraint firstItem="4mJ-N6-1eh" firstAttribute="top" secondItem="NBc-g6-OoR" secondAttribute="bottom" constant="5" id="83w-aU-tnS"/>
+                                    <constraint firstItem="NBc-g6-OoR" firstAttribute="leading" secondItem="7Rk-n6-lKp" secondAttribute="leading" constant="10" id="Ahr-aN-kXO"/>
+                                    <constraint firstItem="PiN-wt-oUK" firstAttribute="leading" secondItem="eAM-aY-JvQ" secondAttribute="trailing" constant="10" id="FMg-pM-u0w"/>
+                                    <constraint firstAttribute="trailing" secondItem="Mtg-fo-cEn" secondAttribute="trailing" constant="15" id="I1F-xM-PTe"/>
+                                    <constraint firstAttribute="trailing" secondItem="NBc-g6-OoR" secondAttribute="trailing" constant="10" id="MUI-a7-Yh2"/>
+                                    <constraint firstItem="PiN-wt-oUK" firstAttribute="centerX" secondItem="7Rk-n6-lKp" secondAttribute="centerX" id="Qyx-ld-yvG"/>
+                                    <constraint firstItem="jAR-qj-Lfj" firstAttribute="leading" secondItem="PiN-wt-oUK" secondAttribute="trailing" constant="10" id="TCt-4u-mJ4"/>
+                                    <constraint firstItem="WFx-r1-Umy" firstAttribute="leading" secondItem="PiN-wt-oUK" secondAttribute="trailing" constant="15" id="UDg-b6-DSm"/>
+                                    <constraint firstItem="eAM-aY-JvQ" firstAttribute="leading" secondItem="7Rk-n6-lKp" secondAttribute="leading" constant="10" id="UHx-hn-5Ah"/>
+                                    <constraint firstItem="NBc-g6-OoR" firstAttribute="top" secondItem="7Rk-n6-lKp" secondAttribute="top" constant="10" id="Xgg-cl-iuq"/>
+                                    <constraint firstItem="PiN-wt-oUK" firstAttribute="top" secondItem="4mJ-N6-1eh" secondAttribute="bottom" constant="12" id="ciw-55-YTH"/>
+                                    <constraint firstItem="4mJ-N6-1eh" firstAttribute="width" secondItem="NBc-g6-OoR" secondAttribute="width" id="dFM-sd-cOx"/>
+                                    <constraint firstItem="dsZ-WI-R3B" firstAttribute="centerY" secondItem="iF2-xm-UIT" secondAttribute="centerY" id="daf-YB-sS6"/>
+                                    <constraint firstItem="Mtg-fo-cEn" firstAttribute="leading" secondItem="WFx-r1-Umy" secondAttribute="trailing" constant="10" id="gcX-56-z41"/>
+                                    <constraint firstItem="eAM-aY-JvQ" firstAttribute="centerY" secondItem="PiN-wt-oUK" secondAttribute="centerY" id="hVg-af-7P6"/>
+                                    <constraint firstAttribute="trailing" secondItem="jAR-qj-Lfj" secondAttribute="trailing" constant="10" id="iXQ-hH-Rl2"/>
+                                    <constraint firstItem="iF2-xm-UIT" firstAttribute="centerY" secondItem="PiN-wt-oUK" secondAttribute="centerY" id="m4m-jU-qga"/>
+                                    <constraint firstItem="4mJ-N6-1eh" firstAttribute="leading" secondItem="NBc-g6-OoR" secondAttribute="leading" id="mYU-uM-kfu"/>
+                                    <constraint firstItem="iF2-xm-UIT" firstAttribute="leading" secondItem="dsZ-WI-R3B" secondAttribute="trailing" constant="10" id="nbq-4s-FlZ"/>
+                                    <constraint firstAttribute="height" constant="100" id="oSx-xh-Uk5"/>
+                                    <constraint firstItem="jAR-qj-Lfj" firstAttribute="centerY" secondItem="PiN-wt-oUK" secondAttribute="centerY" id="pBE-x4-zUa"/>
+                                    <constraint firstItem="PiN-wt-oUK" firstAttribute="leading" secondItem="iF2-xm-UIT" secondAttribute="trailing" constant="15" id="pgQ-8D-eAy"/>
+                                    <constraint firstItem="dsZ-WI-R3B" firstAttribute="leading" secondItem="7Rk-n6-lKp" secondAttribute="leading" constant="15" id="ufX-Xb-37u"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lM4-AR-sF8">
+                                <rect key="frame" x="131.5" y="287.5" width="112.5" height="112.5"/>
+                                <state key="normal" image="Group283"/>
+                                <connections>
+                                    <action selector="buttonNext:" destination="Fmz-eo-K5u" eventType="touchUpInside" id="PFh-kp-hT3"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="lM4-AR-sF8" firstAttribute="centerY" secondItem="9zc-83-b8R" secondAttribute="centerY" id="ATA-6A-VEc"/>
+                            <constraint firstItem="lM4-AR-sF8" firstAttribute="height" secondItem="PpE-hc-NVW" secondAttribute="width" multiplier="0.3" id="Rqv-sF-psK"/>
+                            <constraint firstItem="7Rk-n6-lKp" firstAttribute="centerX" secondItem="9zc-83-b8R" secondAttribute="centerX" id="VJW-ls-mgn"/>
+                            <constraint firstItem="7Rk-n6-lKp" firstAttribute="width" secondItem="PpE-hc-NVW" secondAttribute="width" multiplier="0.9" id="YzI-f1-rkn"/>
+                            <constraint firstItem="lM4-AR-sF8" firstAttribute="top" secondItem="7Rk-n6-lKp" secondAttribute="bottom" constant="20" id="geY-dz-8Fi"/>
+                            <constraint firstItem="lM4-AR-sF8" firstAttribute="width" secondItem="PpE-hc-NVW" secondAttribute="width" multiplier="0.3" id="jLj-Rr-eJs"/>
+                            <constraint firstItem="lM4-AR-sF8" firstAttribute="centerX" secondItem="9zc-83-b8R" secondAttribute="centerX" id="jtc-mR-RfA"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="9zc-83-b8R"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VTK-GA-1TV"/>
+                    <connections>
+                        <outlet property="buttonFrom" destination="eAM-aY-JvQ" id="6Wr-te-HGT"/>
+                        <outlet property="buttonTo" destination="jAR-qj-Lfj" id="6uz-MB-zeW"/>
+                        <outlet property="imgLangFrom" destination="dsZ-WI-R3B" id="4eq-Dd-KZZ"/>
+                        <outlet property="imgLangTo" destination="WFx-r1-Umy" id="MaV-zm-tYP"/>
+                        <outlet property="labelFrom" destination="iF2-xm-UIT" id="CPb-8w-BPQ"/>
+                        <outlet property="labelTo" destination="Mtg-fo-cEn" id="XW8-GV-emu"/>
+                        <outlet property="viewLanguage" destination="7Rk-n6-lKp" id="ahB-1h-ZTq"/>
+                        <segue destination="OLV-vG-xhE" kind="presentation" identifier="Preview" id="C66-Zm-SBz"/>
+                        <segue destination="f5X-Y4-amY" kind="show" identifier="Language" id="44T-on-33D"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QBy-ug-Md7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1810.4000000000001" y="2345.577211394303"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="ZBp-HX-tyh">
             <objects>
@@ -480,9 +643,6 @@
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYv-Se-Ro7">
                                 <rect key="frame" x="0.0" y="667" width="375" height="597"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="597" id="FWJ-de-ryJ"/>
-                                </constraints>
                                 <connections>
                                     <segue destination="pcW-Om-aaE" kind="embed" id="IVF-Vy-jR4"/>
                                 </connections>
@@ -511,6 +671,7 @@
                             <constraint firstItem="7lT-QX-vfy" firstAttribute="trailing" secondItem="xRZ-Wz-jhR" secondAttribute="trailing" id="mjH-1o-JLQ"/>
                             <constraint firstItem="oF1-uZ-OJY" firstAttribute="trailing" secondItem="xRZ-Wz-jhR" secondAttribute="trailing" constant="-5" id="r4E-74-riZ"/>
                             <constraint firstItem="cDJ-I1-AzG" firstAttribute="bottom" secondItem="xRZ-Wz-jhR" secondAttribute="bottom" id="riH-4a-Oc0"/>
+                            <constraint firstItem="JYv-Se-Ro7" firstAttribute="height" secondItem="4OI-th-XhJ" secondAttribute="height" constant="-70" id="uHQ-WI-Qdx"/>
                             <constraint firstItem="O6F-xQ-EF4" firstAttribute="leading" secondItem="xRZ-Wz-jhR" secondAttribute="leading" id="uia-XM-JKA"/>
                             <constraint firstItem="cDJ-I1-AzG" firstAttribute="leading" secondItem="xRZ-Wz-jhR" secondAttribute="leading" id="ujz-Dz-tog"/>
                             <constraint firstItem="xJd-jO-56B" firstAttribute="height" secondItem="4OI-th-XhJ" secondAttribute="height" multiplier="0.4" id="y1b-Xr-M4p"/>
@@ -555,8 +716,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfl-dd-J2H">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nOk-3j-Ir6">
-                                        <rect key="frame" x="147.5" y="30" width="80" height="30"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Countries" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nOk-3j-Ir6">
+                                        <rect key="frame" x="148.5" y="30" width="78.5" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="e6o-h8-LqE"/>
                                         </constraints>
@@ -777,16 +938,29 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vlg-lp-Ok5">
-                                        <rect key="frame" x="37.5" y="597" width="300" height="40"/>
+                                        <rect key="frame" x="19" y="597" width="150" height="40"/>
                                         <color key="backgroundColor" red="0.18823529411764706" green="0.81176470588235294" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="uE7-UP-9sy"/>
                                         </constraints>
-                                        <state key="normal" title="Agreement">
+                                        <state key="normal" title="Terms &amp; Conditions">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="Agreement:" destination="pcW-Om-aaE" eventType="touchUpInside" id="cmH-P7-NI3"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YFP-sm-G8g">
+                                        <rect key="frame" x="206.5" y="597" width="150" height="40"/>
+                                        <color key="backgroundColor" red="0.21542543172836304" green="0.83448654413223267" blue="0.87305551767349243" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="1G8-yd-Vbj"/>
+                                        </constraints>
+                                        <state key="normal" title="Privacy Policy">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="PrivacyPolicy:" destination="pcW-Om-aaE" eventType="touchUpInside" id="9V4-Wk-57y"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -796,6 +970,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                     <constraint firstItem="I23-wl-IBn" firstAttribute="leading" secondItem="CmM-Fe-7Ja" secondAttribute="trailing" constant="10" id="1yR-3u-tMl"/>
                                     <constraint firstAttribute="trailing" secondItem="Xug-0S-jmg" secondAttribute="trailing" constant="30" id="2H8-vJ-QEx"/>
                                     <constraint firstItem="Xug-0S-jmg" firstAttribute="top" secondItem="a7h-CL-T9r" secondAttribute="top" constant="10" id="3Bj-SG-DEy"/>
+                                    <constraint firstItem="YFP-sm-G8g" firstAttribute="top" secondItem="Cb9-m6-7AV" secondAttribute="bottom" constant="10" id="4QX-yW-rA5"/>
                                     <constraint firstItem="nZh-KY-qi2" firstAttribute="top" secondItem="tta-ub-uUl" secondAttribute="bottom" constant="20" id="4ad-LG-ZFx"/>
                                     <constraint firstItem="ctp-Th-ChC" firstAttribute="leading" secondItem="osh-kf-viX" secondAttribute="leading" id="9EC-LW-YsC"/>
                                     <constraint firstItem="Cb9-m6-7AV" firstAttribute="leading" secondItem="a7h-CL-T9r" secondAttribute="leading" constant="30" id="A3Y-qE-Pap"/>
@@ -803,7 +978,8 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                     <constraint firstItem="tta-ub-uUl" firstAttribute="leading" secondItem="ctp-Th-ChC" secondAttribute="trailing" constant="10" id="HQv-m9-4jp"/>
                                     <constraint firstItem="CmM-Fe-7Ja" firstAttribute="top" secondItem="WgK-h7-QvA" secondAttribute="bottom" constant="10" id="JxA-6Y-EQM"/>
                                     <constraint firstItem="nZh-KY-qi2" firstAttribute="centerX" secondItem="a7h-CL-T9r" secondAttribute="centerX" id="KFb-Z6-xMS"/>
-                                    <constraint firstItem="vlg-lp-Ok5" firstAttribute="width" secondItem="a7h-CL-T9r" secondAttribute="width" multiplier="0.8" id="L8K-Tf-l9e"/>
+                                    <constraint firstAttribute="bottom" secondItem="YFP-sm-G8g" secondAttribute="bottom" constant="10" id="Klx-A3-Ygp"/>
+                                    <constraint firstItem="vlg-lp-Ok5" firstAttribute="width" secondItem="a7h-CL-T9r" secondAttribute="width" multiplier="0.4" id="L8K-Tf-l9e"/>
                                     <constraint firstItem="ctp-Th-ChC" firstAttribute="top" secondItem="osh-kf-viX" secondAttribute="bottom" constant="10" id="MUu-S8-W9J"/>
                                     <constraint firstAttribute="trailing" secondItem="Cb9-m6-7AV" secondAttribute="trailing" constant="30" id="OHh-Dk-Qba"/>
                                     <constraint firstItem="vlg-lp-Ok5" firstAttribute="top" secondItem="Cb9-m6-7AV" secondAttribute="bottom" constant="10" id="Oif-9k-CjI"/>
@@ -812,7 +988,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                     <constraint firstItem="osh-kf-viX" firstAttribute="leading" secondItem="CmM-Fe-7Ja" secondAttribute="leading" id="c1X-na-ldT"/>
                                     <constraint firstItem="CmM-Fe-7Ja" firstAttribute="leading" secondItem="WgK-h7-QvA" secondAttribute="leading" id="chE-fW-s0a"/>
                                     <constraint firstItem="r7R-Q0-j8K" firstAttribute="leading" secondItem="osh-kf-viX" secondAttribute="trailing" constant="10" id="dL2-j2-qH2"/>
-                                    <constraint firstItem="vlg-lp-Ok5" firstAttribute="centerX" secondItem="a7h-CL-T9r" secondAttribute="centerX" id="eI2-ba-W6y"/>
+                                    <constraint firstItem="vlg-lp-Ok5" firstAttribute="centerX" secondItem="a7h-CL-T9r" secondAttribute="centerX" multiplier="0.5" id="eI2-ba-W6y"/>
                                     <constraint firstItem="Cb9-m6-7AV" firstAttribute="top" secondItem="nZh-KY-qi2" secondAttribute="bottom" constant="10" id="fVO-qh-FJC"/>
                                     <constraint firstItem="g1c-Xb-HOp" firstAttribute="top" secondItem="Xug-0S-jmg" secondAttribute="bottom" constant="40" id="g2U-Jv-1Vl"/>
                                     <constraint firstItem="osh-kf-viX" firstAttribute="top" secondItem="CmM-Fe-7Ja" secondAttribute="bottom" constant="10" id="gGI-iu-zvC"/>
@@ -820,11 +996,13 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                     <constraint firstItem="tta-ub-uUl" firstAttribute="centerY" secondItem="ctp-Th-ChC" secondAttribute="centerY" id="l5N-LP-2z7"/>
                                     <constraint firstItem="g1c-Xb-HOp" firstAttribute="leading" secondItem="Xug-0S-jmg" secondAttribute="leading" id="l9f-QA-Mn9"/>
                                     <constraint firstAttribute="trailing" secondItem="tta-ub-uUl" secondAttribute="trailing" constant="20" id="myq-le-VZb"/>
+                                    <constraint firstItem="YFP-sm-G8g" firstAttribute="width" secondItem="a7h-CL-T9r" secondAttribute="width" multiplier="0.4" id="pJY-AF-oLg"/>
                                     <constraint firstItem="ara-n4-pJH" firstAttribute="leading" secondItem="WgK-h7-QvA" secondAttribute="trailing" constant="10" id="puN-oI-zQK"/>
                                     <constraint firstItem="nZh-KY-qi2" firstAttribute="width" secondItem="a7h-CL-T9r" secondAttribute="width" multiplier="0.8" id="qzh-fb-yz2"/>
                                     <constraint firstAttribute="trailing" secondItem="ara-n4-pJH" secondAttribute="trailing" constant="20" id="sot-QG-szo"/>
                                     <constraint firstItem="WgK-h7-QvA" firstAttribute="top" secondItem="g1c-Xb-HOp" secondAttribute="bottom" constant="14.5" id="spi-WM-zti"/>
                                     <constraint firstAttribute="trailing" secondItem="g1c-Xb-HOp" secondAttribute="trailing" constant="20" id="uPd-0e-oUc"/>
+                                    <constraint firstItem="YFP-sm-G8g" firstAttribute="centerX" secondItem="a7h-CL-T9r" secondAttribute="centerX" multiplier="1.5" id="vru-ic-pgO"/>
                                     <constraint firstAttribute="trailing" secondItem="I23-wl-IBn" secondAttribute="trailing" constant="20" id="yvl-7M-x9v"/>
                                     <constraint firstItem="ara-n4-pJH" firstAttribute="centerY" secondItem="WgK-h7-QvA" secondAttribute="centerY" id="yzt-fo-fFp"/>
                                     <constraint firstAttribute="trailing" secondItem="r7R-Q0-j8K" secondAttribute="trailing" constant="20" id="zM9-AJ-Zab"/>
@@ -844,6 +1022,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                     <connections>
                         <outlet property="buttonAgreement" destination="vlg-lp-Ok5" id="fOk-FQ-ofk"/>
                         <outlet property="buttonBuyYearly" destination="nZh-KY-qi2" id="NpP-iV-Yvh"/>
+                        <outlet property="buttonPrivacyPolicy" destination="YFP-sm-G8g" id="PkH-3C-Be7"/>
                         <outlet property="labelTerms" destination="Cb9-m6-7AV" id="ZbM-pu-dIZ"/>
                     </connections>
                 </viewController>
@@ -1085,7 +1264,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9y-K9-xkr">
-                                                <rect key="frame" x="10" y="5" width="30" height="20"/>
+                                                <rect key="frame" x="40" y="5" width="30" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="bnq-r0-BmO"/>
                                                 </constraints>
@@ -1130,7 +1309,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                 </connections>
                                             </button>
                                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right arrow" translatesAutoresizingMaskIntoConstraints="NO" id="rfs-yt-6fG">
-                                                <rect key="frame" x="50" y="10" width="5" height="10"/>
+                                                <rect key="frame" x="80" y="10" width="5" height="10"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="5" id="99Y-Rw-BBP"/>
                                                     <constraint firstAttribute="height" constant="10" id="klD-1l-IKw"/>
@@ -1147,6 +1326,13 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                     <action selector="ShareFrom:" destination="1MP-jw-W9F" eventType="touchUpInside" id="KmQ-Go-Ofw"/>
                                                 </connections>
                                             </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XET-q1-a0d">
+                                                <rect key="frame" x="10" y="5" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="20" id="UvK-ul-SYC"/>
+                                                    <constraint firstAttribute="height" constant="20" id="tfv-lc-gjT"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -1158,13 +1344,15 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                             <constraint firstItem="rfs-yt-6fG" firstAttribute="centerY" secondItem="i9y-K9-xkr" secondAttribute="centerY" id="Ao0-qx-wuo"/>
                                             <constraint firstAttribute="trailing" secondItem="t5r-O0-Fab" secondAttribute="trailing" constant="10" id="BmL-Qn-Bf7"/>
                                             <constraint firstItem="i9y-K9-xkr" firstAttribute="top" secondItem="Mm3-Rj-loE" secondAttribute="top" constant="5" id="Cdz-cb-9ez"/>
+                                            <constraint firstItem="XET-q1-a0d" firstAttribute="leading" secondItem="Mm3-Rj-loE" secondAttribute="leading" constant="10" id="EEX-Kl-CdX"/>
                                             <constraint firstItem="t5r-O0-Fab" firstAttribute="leading" secondItem="Mm3-Rj-loE" secondAttribute="leading" constant="10" id="KVw-x3-AyM"/>
+                                            <constraint firstItem="XET-q1-a0d" firstAttribute="centerY" secondItem="i9y-K9-xkr" secondAttribute="centerY" id="MLD-X3-cYT"/>
                                             <constraint firstAttribute="trailing" secondItem="0u3-9N-C7G" secondAttribute="trailing" constant="10" id="SiM-9O-UJi"/>
-                                            <constraint firstItem="i9y-K9-xkr" firstAttribute="leading" secondItem="Mm3-Rj-loE" secondAttribute="leading" constant="10" id="YP6-xC-gbN"/>
                                             <constraint firstItem="kga-LK-t9H" firstAttribute="centerY" secondItem="rzI-8r-vvJ" secondAttribute="centerY" id="ZCU-qL-aaC"/>
                                             <constraint firstItem="GNs-yM-GpM" firstAttribute="leading" secondItem="rzI-8r-vvJ" secondAttribute="trailing" constant="10" id="duT-jP-c5w"/>
                                             <constraint firstAttribute="bottom" secondItem="rzI-8r-vvJ" secondAttribute="bottom" constant="5" id="kMp-SF-liN"/>
                                             <constraint firstItem="rfs-yt-6fG" firstAttribute="leading" secondItem="i9y-K9-xkr" secondAttribute="trailing" constant="10" id="nYH-PY-g8i"/>
+                                            <constraint firstItem="i9y-K9-xkr" firstAttribute="leading" secondItem="XET-q1-a0d" secondAttribute="trailing" constant="10" id="uRj-DC-0Be"/>
                                             <constraint firstAttribute="bottom" secondItem="t5r-O0-Fab" secondAttribute="bottom" constant="30" id="xKN-wT-wod"/>
                                         </constraints>
                                     </view>
@@ -1179,7 +1367,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kf-lX-XCG">
-                                                <rect key="frame" x="10" y="5" width="30" height="20"/>
+                                                <rect key="frame" x="40" y="5" width="30" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="RN1-Av-wAu"/>
                                                 </constraints>
@@ -1191,7 +1379,7 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                 </connections>
                                             </button>
                                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right arrow" translatesAutoresizingMaskIntoConstraints="NO" id="AMR-KK-8Dc">
-                                                <rect key="frame" x="50" y="10" width="5" height="10"/>
+                                                <rect key="frame" x="80" y="10" width="5" height="10"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="10" id="mc5-zr-PkM"/>
                                                     <constraint firstAttribute="width" constant="5" id="qhF-Ka-g5G"/>
@@ -1241,6 +1429,13 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                                     <action selector="ShareTo:" destination="1MP-jw-W9F" eventType="touchUpInside" id="OGP-d3-LHm"/>
                                                 </connections>
                                             </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LqQ-Qj-szb">
+                                                <rect key="frame" x="10" y="5" width="20" height="20"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="20" id="nX1-a0-2ZW"/>
+                                                    <constraint firstAttribute="width" constant="20" id="nnb-TX-UnB"/>
+                                                </constraints>
+                                            </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -1255,10 +1450,12 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                                             <constraint firstItem="02p-Ng-JgZ" firstAttribute="top" secondItem="bFT-m0-sgg" secondAttribute="top" constant="30" id="Pad-wt-4ws"/>
                                             <constraint firstItem="6kf-lX-XCG" firstAttribute="top" secondItem="bFT-m0-sgg" secondAttribute="top" constant="5" id="QPv-kW-RJ5"/>
                                             <constraint firstAttribute="trailing" secondItem="H4w-NF-zaM" secondAttribute="trailing" constant="10" id="QZq-OZ-UEc"/>
+                                            <constraint firstItem="LqQ-Qj-szb" firstAttribute="leading" secondItem="bFT-m0-sgg" secondAttribute="leading" constant="10" id="Qqd-Wq-P7u"/>
+                                            <constraint firstItem="6kf-lX-XCG" firstAttribute="leading" secondItem="LqQ-Qj-szb" secondAttribute="trailing" constant="10" id="bhY-Zb-5MV"/>
                                             <constraint firstItem="H4w-NF-zaM" firstAttribute="leading" secondItem="TJS-Dh-32j" secondAttribute="trailing" constant="10" id="ekp-0z-Pr5"/>
-                                            <constraint firstItem="6kf-lX-XCG" firstAttribute="leading" secondItem="bFT-m0-sgg" secondAttribute="leading" constant="10" id="o6U-DG-q0c"/>
                                             <constraint firstItem="bWX-vx-Sde" firstAttribute="centerY" secondItem="TJS-Dh-32j" secondAttribute="centerY" id="oef-7K-xy9"/>
                                             <constraint firstAttribute="bottom" secondItem="02p-Ng-JgZ" secondAttribute="bottom" constant="30" id="p4A-M4-Jwx"/>
+                                            <constraint firstItem="LqQ-Qj-szb" firstAttribute="centerY" secondItem="6kf-lX-XCG" secondAttribute="centerY" id="pKd-Aa-66I"/>
                                             <constraint firstItem="AMR-KK-8Dc" firstAttribute="leading" secondItem="6kf-lX-XCG" secondAttribute="trailing" constant="10" id="t8g-l9-fO0"/>
                                         </constraints>
                                     </view>
@@ -1319,6 +1516,8 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                     <connections>
                         <outlet property="buttonFrom" destination="i9y-K9-xkr" id="Gzh-PY-eFg"/>
                         <outlet property="buttonTo" destination="6kf-lX-XCG" id="Ftq-iZ-I8g"/>
+                        <outlet property="imageFrom" destination="XET-q1-a0d" id="4Yf-Lx-HU3"/>
+                        <outlet property="imageTo" destination="LqQ-Qj-szb" id="uSE-1d-yeg"/>
                         <outlet property="leftMic" destination="A9I-aY-3xK" id="20f-g8-RUS"/>
                         <outlet property="rightMic" destination="Aww-Vb-Cot" id="BrV-vn-r2E"/>
                         <outlet property="textFrom" destination="t5r-O0-Fab" id="Krx-fR-K5s"/>
@@ -1330,16 +1529,19 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Yu-61-g5I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="649" y="1633"/>
+            <point key="canvasLocation" x="648.79999999999995" y="1632.2338830584708"/>
         </scene>
     </scenes>
     <resources>
+        <image name="Group283" width="99.5" height="100.5"/>
         <image name="back arrow_white" width="12" height="18"/>
         <image name="camera" width="28" height="28"/>
         <image name="checklist icon" width="20" height="20"/>
         <image name="clear icon" width="15" height="15"/>
         <image name="copy paste icon" width="20" height="20"/>
+        <image name="en" width="40" height="20"/>
         <image name="full screen icon" width="20" height="20"/>
+        <image name="id" width="30" height="20"/>
         <image name="mic" width="68.5" height="68.5"/>
         <image name="phrasebook" width="25" height="25"/>
         <image name="purchase" width="25" height="25"/>
@@ -1353,5 +1555,6 @@ Renewal fee: Apple's iTunes account will be charged within 24 hours before expir
     <inferredMetricsTieBreakers>
         <segue reference="uIE-oj-CCU"/>
         <segue reference="str-LE-pco"/>
+        <segue reference="9Ex-Uv-cMg"/>
     </inferredMetricsTieBreakers>
 </document>

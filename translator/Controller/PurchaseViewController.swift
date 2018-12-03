@@ -16,6 +16,7 @@ class PurchaseViewController: ParentViewController,
     @IBOutlet weak var buttonBuyYearly: UIButton!
     @IBOutlet weak var labelTerms: UITextView!
     @IBOutlet weak var buttonAgreement: UIButton!
+    @IBOutlet weak var buttonPrivacyPolicy: UIButton!
     
     var product_id: String?
     
@@ -25,6 +26,7 @@ class PurchaseViewController: ParentViewController,
         // Do any additional setup after loading the view.
         buttonBuyYearly.layer.cornerRadius = 20
         buttonAgreement.layer.cornerRadius = 20
+        buttonPrivacyPolicy.layer.cornerRadius = 20
         
         ChangeBG(sender: self, image: "BG iPhone 1")
         
@@ -57,7 +59,11 @@ class PurchaseViewController: ParentViewController,
     
     @IBAction func Agreement(_ sender: Any)
     {
-        self.OpenURL(urlStr: "")
+        self.OpenURL(urlStr: "http://teknomajusentosa.com/terms_of_service.php?id=Jisu_Translate_terms_of_service.html")
+    }
+    @IBAction func PrivacyPolicy(_ sender: Any)
+    {
+        self.OpenURL(urlStr: "http://teknomajusentosa.com/policy/policy.php?id=Jisu_Translate.html")
     }
     
     //MARK: In App Purchase Delegate

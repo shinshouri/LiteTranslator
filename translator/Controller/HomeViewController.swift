@@ -55,7 +55,7 @@ class HomeViewController: ParentViewController,
         SKPaymentQueue.default().restoreCompletedTransactions()
         SetupUI()
         
-//        RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
+        RequestAPIAds(urlRequest: URL_REQUESTAPI_ADS, params: String(format: "bundle_id=%@&seq_num=1", BUNDLEID))
         NSLog("%@", getDeviceID())
     }
     
@@ -190,14 +190,14 @@ class HomeViewController: ParentViewController,
     
     @IBAction func GoToConversation(_ sender: Any)
     {
-//        if KeyChainStore.load("ExpiredDate") != nil
-//        {
+        if KeyChainStore.load("ExpiredDate") != nil
+        {
             performSegue(withIdentifier: "Conversation", sender: self)
-//        }
-//        else
-//        {
-//            HandleSwipeButton()
-//        }
+        }
+        else
+        {
+            HandleSwipeButton()
+        }
     }
     
     @IBAction func GoToOCR(_ sender: Any)

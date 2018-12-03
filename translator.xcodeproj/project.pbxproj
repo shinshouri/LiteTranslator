@@ -20,6 +20,7 @@
 		00380815219D736B00810AF6 /* ParentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380814219D736B00810AF6 /* ParentViewController.swift */; };
 		00380818219D73C400810AF6 /* ThemeConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380817219D73C300810AF6 /* ThemeConstant.swift */; };
 		0038081A219D7E9300810AF6 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00380819219D7E9300810AF6 /* FavoriteViewController.swift */; };
+		007B651121AFFE0E0013EBB6 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B651021AFFE0E0013EBB6 /* PreviewViewController.swift */; };
 		00F5920421A274B900BE4BFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00F5920321A274B900BE4BFF /* AVFoundation.framework */; };
 		00F5920621A2B1B800BE4BFF /* LanguageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */; };
 		00F59B2C21A6B040002F85EA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00F59B2E21A6B040002F85EA /* Localizable.strings */; };
@@ -88,6 +89,7 @@
 		00380814219D736B00810AF6 /* ParentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParentViewController.swift; sourceTree = "<group>"; };
 		00380817219D73C300810AF6 /* ThemeConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeConstant.swift; sourceTree = "<group>"; };
 		00380819219D7E9300810AF6 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		007B651021AFFE0E0013EBB6 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		00F5920321A274B900BE4BFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageViewController.swift; sourceTree = "<group>"; };
 		00F59B2D21A6B040002F85EA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				00380811219D72FC00810AF6 /* PurchaseViewController.swift */,
 				00380819219D7E9300810AF6 /* FavoriteViewController.swift */,
 				00F5920521A2B1B800BE4BFF /* LanguageViewController.swift */,
+				007B651021AFFE0E0013EBB6 /* PreviewViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				00F6E255219D54E8006B64C5 /* ZoomViewController.swift in Sources */,
 				0001D1E3219BC93200A51B6E /* AppDelegate.swift in Sources */,
 				00380818219D73C400810AF6 /* ThemeConstant.swift in Sources */,
+				007B651121AFFE0E0013EBB6 /* PreviewViewController.swift in Sources */,
 				0038081A219D7E9300810AF6 /* FavoriteViewController.swift in Sources */,
 				00380815219D736B00810AF6 /* ParentViewController.swift in Sources */,
 				00F6E24E219D2193006B64C5 /* ConversationViewController.swift in Sources */,
